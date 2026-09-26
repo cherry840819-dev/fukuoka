@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>福岡·糸島·由布院 九州自由行 街道漫步與自駕指南</title>
+  <title>福岡·糸島·由布院 九州自由行指南</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -18,10 +18,10 @@
   <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   
-  <!-- Google Fonts: Inter & Noto Sans TC (ExtraLight & Thin focused) -->
+  <!-- Google Fonts: Noto Sans TC & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Noto+Sans+TC:wght@100;200;300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Noto+Sans+TC:wght@200;300;400;500&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -29,6 +29,18 @@
         extend: {
           fontFamily: {
             sans: ['"Noto Sans TC"', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            parklet: {
+              sky: '#84c4e2',
+              cream: '#fdfbf7',
+              yellow: '#e8b73f',
+              darkYellow: '#caa031',
+              green: '#74a838',
+              peach: '#e88f7d',
+              navy: '#1b324b',
+              soil: '#422f1d'
+            }
           }
         }
       }
@@ -36,12 +48,11 @@
   </script>
 
   <style>
-    /* Ultra-slender Typography */
     body {
       font-family: "Noto Sans TC", "Inter", sans-serif;
       font-weight: 300;
-      color: #3b2a1a;
-      background-color: #e5b33d;
+      color: #382613;
+      background-color: #e8b73f;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       margin: 0;
@@ -49,31 +60,52 @@
       overflow-x: hidden;
     }
 
-    /* Dot Grid Texture from original design */
-    .mustard-dots-bg {
-      background-color: #e5b33d;
-      background-image: radial-gradient(#caa031 2px, transparent 2px);
-      background-size: 28px 28px;
+    /* Subtle dot pattern for street-walk atmosphere */
+    .street-walk-pattern {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.28) 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
     }
 
-    /* Elegant Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+    /* Completely hide scrollbars across all browsers */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+      width: 0 !important;
+      height: 0 !important;
     }
-    ::-webkit-scrollbar-track {
-      background: #ecd497;
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
-    ::-webkit-scrollbar-thumb {
-      background: #caa031;
-      border-radius: 9999px;
+
+    /* Drag-to-scroll interactive cue */
+    .drag-scroll-container {
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .drag-scroll-container.is-dragging {
+      cursor: grabbing;
+      cursor: -webkit-grabbing;
+    }
+
+    /* Notch Rounded Cards */
+    .notch-card-left {
+      border-radius: 2.25rem 1.25rem 1.25rem 2.25rem;
+    }
+    .notch-card-right {
+      border-radius: 1.25rem 2.25rem 2.25rem 1.25rem;
+    }
+    @media (max-width: 640px) {
+      .notch-card-left, .notch-card-right {
+        border-radius: 1.5rem;
+      }
     }
 
     #map-container {
-      height: 380px;
+      height: 360px;
       width: 100%;
       z-index: 10;
-      border-radius: 1.5rem;
+      border-radius: 1.25rem;
     }
 
     .custom-map-icon {
@@ -94,765 +126,703 @@
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col selection:bg-[#203c54] selection:text-white">
+<body class="min-h-screen flex flex-col street-walk-pattern selection:bg-[#382613] selection:text-white">
 
-  <!-- Authentic Illustrated Sky Banner -->
-  <header class="relative bg-gradient-to-b from-[#64b3e8] via-[#85c8ef] to-[#aee0f8] pt-10 pb-20 overflow-hidden text-white select-none">
+  <!-- Top Illustrated Sky Banner -->
+  <header class="relative bg-gradient-to-b from-[#63b1dc] via-[#7ec0e4] to-[#a2d2ea] pt-8 pb-16 px-4 overflow-hidden border-b-4 border-[#86be50]">
+    <div class="absolute top-4 left-1/4 w-32 h-10 bg-white/70 rounded-full blur-xs pointer-events-none"></div>
+    <div class="absolute top-8 right-1/4 w-44 h-12 bg-white/60 rounded-full blur-xs pointer-events-none"></div>
     
-    <!-- Cloud Background elements -->
-    <div class="absolute top-6 left-1/4 w-32 h-10 bg-white/40 rounded-full blur-[1px] pointer-events-none"></div>
-    <div class="absolute top-12 right-1/3 w-40 h-12 bg-white/35 rounded-full blur-[1px] pointer-events-none"></div>
-
-    <!-- Left Illustration: Abstract Street Light & Ball -->
-    <div class="absolute top-10 left-6 sm:left-14 flex flex-col items-center pointer-events-none opacity-95">
-      <div class="w-7 h-7 rounded-full bg-[#f6be3c] shadow-xs"></div>
-      <div class="w-6 h-7 bg-[#2965a4] rounded-b-xl -mt-1"></div>
-      <div class="flex gap-2.5 mt-2">
-        <div class="w-0.5 h-10 bg-[#345b7e] rotate-[-12deg]"></div>
-        <div class="w-0.5 h-10 bg-[#345b7e] rotate-[12deg]"></div>
-      </div>
-      <div class="w-3.5 h-3.5 rounded-full bg-[#e4763e] -mt-1 ml-6 shadow-2xs"></div>
-    </div>
-
-    <!-- Right Illustration: Abstract Beach Parasol & Balls -->
-    <div class="absolute top-10 right-6 sm:right-14 flex flex-col items-center pointer-events-none opacity-95">
-      <div class="w-12 h-12 rounded-full bg-[#f28c86] relative overflow-hidden flex items-center justify-center shadow-xs">
-        <div class="absolute inset-0 flex">
-          <div class="w-1/2 h-full bg-[#fad6d4]/40"></div>
-          <div class="w-1/2 h-full bg-transparent"></div>
-        </div>
-        <div class="w-0.5 h-full bg-white/80 z-10"></div>
-        <div class="w-full h-0.5 bg-white/80 z-10"></div>
-      </div>
-      <div class="w-0.5 h-8 bg-[#8d5423]"></div>
-      <div class="flex gap-2 -mt-1">
-        <div class="w-3 h-3 rounded-full bg-[#caa031]"></div>
-        <div class="w-3 h-3 rounded-full bg-[#caa031]"></div>
+    <!-- Left Streetlight Illustration -->
+    <div class="absolute bottom-6 left-6 sm:left-12 pointer-events-none hidden sm:block opacity-90">
+      <div class="flex flex-col items-center">
+        <div class="w-4 h-4 rounded-full bg-amber-400 shadow-sm"></div>
+        <div class="w-1 h-12 bg-sky-800"></div>
+        <div class="w-6 h-1.5 bg-amber-500 rounded-full"></div>
       </div>
     </div>
 
-    <!-- Center Content -->
-    <div class="max-w-5xl mx-auto px-4 text-center relative z-10 flex flex-col items-center space-y-3.5">
-      
-      <!-- Top Pill 1: LET'S ENJOY PLACE MAKING -->
-      <div class="inline-flex items-center gap-2 px-5 py-1 rounded-full bg-white text-[#2a5070] text-xs font-normal tracking-wider shadow-xs">
-        <span class="w-2 h-2 rounded-full bg-[#f5be38]"></span>
+    <!-- Right Beach Umbrella Illustration -->
+    <div class="absolute bottom-6 right-6 sm:right-12 pointer-events-none hidden sm:block opacity-90">
+      <div class="w-12 h-12 rounded-full border-4 border-white bg-pink-300 flex items-center justify-center shadow-md">
+        <div class="w-0.5 h-12 bg-white rotate-45"></div>
+      </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto text-center relative z-10 space-y-4">
+      <!-- Tag Pill -->
+      <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/95 text-stone-700 text-xs font-light shadow-2xs tracking-wider">
+        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
         <span>LET'S ENJOY PLACE MAKING · 2026 AUTUMN</span>
       </div>
 
-      <!-- Top Pill 2: まちなか まち歩きガイド -->
-      <div class="inline-block px-5 py-0.5 rounded-full bg-[#4682b4]/60 backdrop-blur-xs text-white text-xs font-light tracking-widest">
-        まちなか まち歩きガイド
+      <!-- Japanese Sub-pill -->
+      <div>
+        <span class="inline-block px-4 py-0.5 rounded-full bg-[#3d7092]/80 text-white text-[11px] font-light tracking-widest backdrop-blur-xs">
+          まちなか まち歩きガイド
+        </span>
       </div>
 
-      <!-- Super Slender Main Title -->
-      <h1 class="text-3xl sm:text-5xl md:text-6xl font-extralight tracking-[0.25em] text-white pt-2 pb-1 drop-shadow-xs">
+      <!-- Large Slender Header with single-line whitespace preservation -->
+      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight text-white tracking-[0.14em] sm:tracking-[0.18em] drop-shadow-xs select-none whitespace-nowrap overflow-visible">
         福 岡 · 糸 島 · 由 布 院
       </h1>
 
-      <!-- Slender Subtitle -->
-      <p class="text-xs sm:text-sm font-light tracking-[0.2em] text-white/95">
+      <p class="text-xs sm:text-sm text-white/95 font-light tracking-widest whitespace-nowrap">
         6 天 5 夜 九州自由行 街道漫步與自駕指南
       </p>
 
-      <!-- Bottom Three Capsule Badges -->
-      <div class="flex flex-wrap items-center justify-center gap-2.5 pt-3 text-xs font-light">
-        <div class="px-4 py-1.5 rounded-full bg-white text-[#2e4d6a] shadow-xs flex items-center gap-1.5">
-          <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#3078a6]"></i>
+      <!-- Info Pills Row -->
+      <div class="flex flex-wrap items-center justify-center gap-2.5 pt-2 text-xs font-light">
+        <span class="px-3.5 py-1.5 rounded-full bg-white/95 text-emerald-800 shadow-2xs flex items-center gap-1.5 whitespace-nowrap">
+          <i data-lucide="calendar" class="w-3.5 h-3.5 text-emerald-600"></i>
           <span>2026.09.27 (日) - 10.02 (五)</span>
-        </div>
-
-        <div class="px-4 py-1.5 rounded-full bg-white text-[#2e4d6a] shadow-xs flex items-center gap-1.5">
-          <i data-lucide="car" class="w-3.5 h-3.5 text-[#de7b35]"></i>
+        </span>
+        <span class="px-3.5 py-1.5 rounded-full bg-white/95 text-amber-900 shadow-2xs flex items-center gap-1.5 whitespace-nowrap">
+          <i data-lucide="car" class="w-3.5 h-3.5 text-amber-600"></i>
           <span>地鐵感應 ＋ 糸島由布院自駕</span>
-        </div>
-
-        <button onclick="window.print()" class="no-print px-4 py-1.5 rounded-full bg-[#f6be3c] hover:bg-[#eab02c] text-[#4d3209] font-normal shadow-xs transition flex items-center gap-1.5">
+        </span>
+        <button onclick="window.print()" class="no-print px-4 py-1.5 rounded-full bg-amber-500 hover:bg-amber-600 text-white shadow-2xs flex items-center gap-1.5 transition whitespace-nowrap">
           <i data-lucide="printer" class="w-3.5 h-3.5"></i>
           <span>列印 / 存為 PDF</span>
         </button>
       </div>
-
-    </div>
-
-    <!-- Rolling Green Hill Wave Transition -->
-    <div class="absolute bottom-0 inset-x-0 h-10 w-full overflow-hidden leading-none pointer-events-none">
-      <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-10">
-        <path d="M0,0 C300,70 800,10 1200,50 L1200,120 L0,120 Z" fill="#9ec956" opacity="0.85"></path>
-        <path d="M0,30 C350,90 750,20 1200,75 L1200,120 L0,120 Z" fill="#8cb944"></path>
-      </svg>
     </div>
   </header>
 
-  <!-- Floating Day Navigation Pill Bar -->
-  <div class="relative z-30 -mt-6 max-w-6xl mx-auto px-4 w-full">
-    <div class="bg-white rounded-full p-2 sm:p-2.5 shadow-xl border border-stone-200 flex items-center justify-between gap-2 overflow-x-auto">
-      
-      <!-- Day Buttons Container -->
-      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 overflow-x-auto" id="day-tabs-container">
-        <!-- Rendered by JavaScript -->
-      </div>
+  <!-- Green Rolling Hills Transition -->
+  <div class="h-6 sm:h-8 bg-gradient-to-b from-[#86be50] to-[#74a838] relative -mt-1 shadow-inner"></div>
 
-      <!-- Right Logo Pill -->
-      <div class="hidden md:flex items-center gap-2 pr-4 pl-2 shrink-0 border-l border-stone-200">
-        <span class="w-6 h-6 rounded-full bg-[#f6be3c] text-white flex items-center justify-center text-[11px] font-normal shadow-2xs">
-          景
-        </span>
-        <span class="text-xs font-normal tracking-wider text-[#634927] whitespace-nowrap">
-          PARKLET ITINERARY
-        </span>
+  <!-- Floating Day Navigation Bar (Sticky with Drag Scroll & Hidden Scrollbar) -->
+  <nav class="sticky top-2 z-40 max-w-5xl w-full mx-auto px-4 -mt-4 sm:-mt-5">
+    <div class="bg-white/95 backdrop-blur-md rounded-full p-1.5 sm:p-2 border-2 border-[#dfc384] shadow-lg flex items-center justify-between gap-1 overflow-hidden">
+      <!-- Drag Scroll Day Pills Wrapper -->
+      <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar drag-scroll-container py-0.5 px-1" id="day-nav-pills">
+        <!-- Rendered by JS -->
       </div>
-
+      <div class="pr-3 hidden md:flex items-center gap-1.5 text-xs text-amber-800 font-light whitespace-nowrap shrink-0 pl-2">
+        <span class="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px]">景</span>
+        <span>PARKLET ITINERARY</span>
+      </div>
     </div>
-  </div>
+  </nav>
 
-  <!-- Main Body Canvas: Classic Mustard Dot Matrix Canvas -->
-  <main class="mustard-dots-bg flex-1 pt-8 pb-16 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-6xl mx-auto space-y-6">
+  <!-- Main Container on Warm Mustard Background -->
+  <main class="max-w-5xl w-full mx-auto px-4 pt-3 pb-8 space-y-6 flex-1">
 
-      <!-- Section 01 Header -->
-      <div class="flex items-center gap-3 pt-2">
-        <div class="w-10 h-10 rounded-full bg-white text-[#4a3416] flex items-center justify-center font-normal text-base shadow-md shrink-0">
-          01
-        </div>
-        <div>
-          <div class="flex items-center gap-2.5 flex-wrap">
-            <h2 class="text-base sm:text-lg font-normal text-[#382613] tracking-widest whitespace-nowrap">
-              FLIGHT & RESERVATIONS?
+    <!-- SECTION 01: FLIGHT & RESERVATIONS -->
+    <section class="space-y-3">
+      <div class="flex items-center justify-between pt-1">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-white text-[#4a3416] flex items-center justify-center font-normal text-base shadow-md shrink-0 border border-[#dfc384]">
+            01
+          </div>
+          <div>
+            <h2 class="text-base sm:text-lg font-normal text-[#382613] tracking-wider flex items-center gap-2 flex-wrap">
+              <span>FLIGHT & RESERVATIONS?</span>
+              <span class="text-xs font-light text-[#593d17] bg-[#fcedc7] px-2.5 py-0.5 rounded-full whitespace-nowrap border border-[#ebd8ab]">
+                航班與已確認預約
+              </span>
             </h2>
-            <span class="text-[11px] font-light text-[#593d17] bg-[#fcedc7] px-2.5 py-0.5 rounded-full whitespace-nowrap border border-[#ebd8ab]">
-              航班與已確認預約
-            </span>
+            <p class="text-xs font-light text-[#5f4422]">
+              台灣虎航直飛航班與行程重點預約確認通道
+            </p>
           </div>
-          <p class="text-xs font-light text-[#5f4422]">
-            台灣虎航直飛航班與行程重點預約確認通道
-          </p>
         </div>
       </div>
 
-      <!-- Section 01 Cards Grid -->
-      <div class="space-y-4">
+      <!-- Flight & Reservations Cards Container -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
         
-        <!-- Flight Card (Collapsible) -->
-        <div class="bg-white rounded-3xl p-5 shadow-md border border-[#dfc384] space-y-3">
-          <button onclick="toggleAccordion('flight-accordion-body', 'flight-arrow')" class="w-full flex items-center justify-between text-left">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-[#0284c7] text-white flex items-center justify-center shrink-0 shadow-xs">
-                <i data-lucide="plane" class="w-4 h-4"></i>
-              </div>
-              <h3 class="text-sm sm:text-base font-normal text-[#382613] tracking-wide">
-                台灣虎航 直飛航班資訊 (IT240 去程 / IT721 回程)
-              </h3>
-            </div>
-            <i id="flight-arrow" data-lucide="chevron-up" class="w-5 h-5 text-stone-400 transition-transform duration-300"></i>
-          </button>
-
-          <div id="flight-accordion-body" class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-            <!-- Outbound -->
-            <div class="p-3.5 rounded-2xl bg-[#f8fbfe] border border-[#d2e8f8] space-y-1.5 text-xs">
-              <div class="flex items-center justify-between">
-                <span class="font-normal text-[#0369a1] bg-[#e0f2fe] px-2 py-0.5 rounded">去程 IT240 · tigersmart</span>
-                <span class="text-[11px] text-stone-500">2026-09-27 (日)</span>
-              </div>
-              <div class="flex justify-between items-center text-[#382613] pt-1">
-                <div>
-                  <div class="text-[11px] text-stone-500">桃園 (TPE T1)</div>
-                  <div class="text-base font-medium">06:15 AM</div>
-                </div>
-                <i data-lucide="arrow-right" class="w-4 h-4 text-stone-400"></i>
-                <div class="text-right">
-                  <div class="text-[11px] text-stone-500">福岡 (FUK 國際線)</div>
-                  <div class="text-base font-medium text-emerald-700">09:35 AM</div>
-                </div>
-              </div>
-              <p class="text-[11px] text-stone-500 pt-1">預計 10:15 完成通關，出發前往 LaLaport</p>
-            </div>
-
-            <!-- Inbound -->
-            <div class="p-3.5 rounded-2xl bg-[#fffaf5] border border-[#fed7aa] space-y-1.5 text-xs">
-              <div class="flex items-center justify-between">
-                <span class="font-normal text-[#c2410c] bg-[#ffedd5] px-2 py-0.5 rounded">回程 IT721 · tigersmart</span>
-                <span class="text-[11px] text-stone-500">2026-10-02 (五)</span>
-              </div>
-              <div class="flex justify-between items-center text-[#382613] pt-1">
-                <div>
-                  <div class="text-[11px] text-stone-500">福岡 (FUK 國際線)</div>
-                  <div class="text-base font-medium">19:00 PM</div>
-                </div>
-                <i data-lucide="arrow-right" class="w-4 h-4 text-stone-400"></i>
-                <div class="text-right">
-                  <div class="text-[11px] text-stone-500">桃園 (TPE T1)</div>
-                  <div class="text-base font-medium text-emerald-700">20:25 PM</div>
-                </div>
-              </div>
-              <p class="text-[11px] text-stone-500 pt-1">15:30 機場還車加油，17:00 櫃檯完成行李報到</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3 Confirmed Reservations Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          
-          <!-- Res 1: Shidare -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-md border border-[#dfc384] space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded-md bg-[#fee2e2] text-[#991b1b] text-xs font-normal">Day 1 晚餐 · 17:30</span>
-              <a href="https://www.tablecheck.com/zh-TW/reservation/WNZJQK" target="_blank" class="text-[11px] text-[#b91c1c] underline flex items-center gap-0.5">
-                訂位單 <i data-lucide="external-link" class="w-3 h-3"></i>
-              </a>
-            </div>
-            <div>
-              <h4 class="text-sm font-normal text-[#382613]">焼肉 垂れ桜 (Yakiniku Shidare)</h4>
-              <p class="text-[11px] font-light text-[#73532c]">福岡市中央區警固 1-13-9</p>
-            </div>
-            <button onclick="googleMapsSearch('焼肉 垂れ桜 福岡')" class="w-full py-1.5 px-3 rounded-xl bg-[#fff5f5] hover:bg-[#fee2e2] text-[#b91c1c] border border-[#fecaca] text-xs font-light transition flex items-center justify-center gap-1.5">
-              <i data-lucide="navigation" class="w-3.5 h-3.5"></i> 一鍵開啟導航
-            </button>
-          </div>
-
-          <!-- Res 2: Itoshima -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-md border border-[#dfc384] space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded-md bg-[#e0f2fe] text-[#0369a1] text-xs font-normal">Day 3 午餐 · 已訂位</span>
-              <span class="text-[11px] text-stone-500">海景海鮮丼</span>
-            </div>
-            <div>
-              <h4 class="text-sm font-normal text-[#382613]">糸島海鮮堂 二見浦本店</h4>
-              <p class="text-[11px] font-light text-[#73532c]">福岡市西區大字小田 2206-1</p>
-            </div>
-            <button onclick="googleMapsSearch('糸島海鮮堂 二見浦本店')" class="w-full py-1.5 px-3 rounded-xl bg-[#f0f9ff] hover:bg-[#e0f2fe] text-[#0369a1] border border-[#bae6fd] text-xs font-light transition flex items-center justify-center gap-1.5">
-              <i data-lucide="navigation" class="w-3.5 h-3.5"></i> 一鍵開啟導航
-            </button>
-          </div>
-
-          <!-- Res 3: Minami no Kaze -->
-          <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-md border border-[#dfc384] space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded-md bg-[#dcfce7] text-[#15803d] text-xs font-normal">Day 4 晚餐 · 18:30 已訂</span>
-              <span class="text-[11px] text-stone-500">義大利料理</span>
-            </div>
-            <div>
-              <h4 class="text-sm font-normal text-[#382613]">Restaurant Minami no Kaze</h4>
-              <p class="text-[11px] font-light text-[#73532c]">由布市湯布院町川南 (南之風)</p>
-            </div>
-            <button onclick="googleMapsSearch('Minami no Kaze 由布院')" class="w-full py-1.5 px-3 rounded-xl bg-[#f0fdf4] hover:bg-[#dcfce7] text-[#15803d] border border-[#bbf7d0] text-xs font-light transition flex items-center justify-center gap-1.5">
-              <i data-lucide="navigation" class="w-3.5 h-3.5"></i> 一鍵開啟導航
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- Section 02 Header -->
-      <div id="daily-itinerary-section" class="flex items-center gap-3 pt-6">
-        <div class="w-10 h-10 rounded-full bg-white text-[#4a3416] flex items-center justify-center font-normal text-base shadow-md shrink-0">
-          02
-        </div>
-        <div>
-          <div class="flex items-center gap-2.5 flex-wrap">
-            <h2 class="text-base sm:text-lg font-normal text-[#382613] tracking-widest whitespace-nowrap">
-              DAILY ITINERARY & ROUTES!
-            </h2>
-            <span class="text-[11px] font-light text-[#593d17] bg-[#fcedc7] px-2.5 py-0.5 rounded-full whitespace-nowrap border border-[#ebd8ab]">
-              每日行程漫步
+        <!-- Flight Card -->
+        <div class="bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md flex flex-col">
+          <button type="button" onclick="toggleSectionAccordion('flight-card-body', 'flight-card-arrow', 'flight-card-text')" class="w-full flex items-center justify-between border-b border-stone-200 pb-2.5 text-left cursor-pointer transition shrink-0">
+            <span class="font-normal text-sm text-[#382613] flex items-center gap-2">
+              <i data-lucide="plane" class="w-4 h-4 text-sky-600"></i> 台灣虎航直飛航班資訊
             </span>
-          </div>
-          <p class="text-xs font-light text-[#5f4422]">
-            點選上方膠囊按鈕查看當日行程路線、交通與 Google 導航
-          </p>
-        </div>
-      </div>
-
-      <!-- Section 02 Content Grid: Left Timeline, Right Map & Hotel Nav -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
-        <!-- Left: Active Day Itinerary Timeline -->
-        <div class="lg:col-span-7 space-y-4">
-          
-          <!-- Day Summary Card -->
-          <div class="bg-white rounded-3xl p-5 shadow-md border border-[#dfc384] space-y-2">
-            <div class="flex items-center justify-between flex-wrap gap-2">
-              <div class="flex items-center gap-2">
-                <span id="active-day-badge" class="px-3 py-0.5 rounded-xl text-xs font-medium bg-[#1e293b] text-white tracking-wider">
-                  DAY 1
-                </span>
-                <span id="active-day-date" class="text-xs font-light text-stone-600">9/27 (日)</span>
-              </div>
-              <span id="active-day-transport-badge" class="px-2.5 py-0.5 rounded-xl text-xs font-light bg-[#ecfdf5] text-[#065f46] border border-[#a7f3d0]">
-                地鐵 / 巴士
+            <div class="flex items-center gap-1.5 shrink-0">
+              <span class="text-[10px] px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-light">TPE ⇄ FUK</span>
+              <span class="md:hidden text-[10px] px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 font-light">
+                <span id="flight-card-text">展開</span>
+                <i id="flight-card-arrow" data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-300"></i>
               </span>
             </div>
-            <h3 id="active-day-title" class="text-base sm:text-lg font-normal text-[#382613] leading-snug">
+          </button>
+          
+          <div id="flight-card-body" class="hidden md:flex flex-1 flex-col justify-around gap-2.5 font-light pt-3">
+            <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex flex-col justify-center flex-1">
+              <div class="flex items-center justify-between">
+                <span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px]">去程 IT240</span>
+                <span class="text-[10px] text-stone-500">2026.09.27 (日)</span>
+              </div>
+              <p class="font-normal text-stone-800 text-sm mt-1">06:15 桃園 (TPE T1) ➔ 09:35 福岡 (FUK)</p>
+              <p class="text-[10px] text-stone-500 mt-0.5">預計 10:15 完成出關，直接展開行程</p>
+            </div>
+
+            <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex flex-col justify-center flex-1">
+              <div class="flex items-center justify-between">
+                <span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px]">回程 IT721</span>
+                <span class="text-[10px] text-stone-500">2026.10.02 (五)</span>
+              </div>
+              <p class="font-normal text-stone-800 text-sm mt-1">19:00 福岡 (FUK) ➔ 20:25 桃園 (TPE T1)</p>
+              <p class="text-[10px] text-stone-500 mt-0.5">預計 17:00 前往國際線 3F 報到託運</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confirmed Food Reservations Card -->
+        <div class="bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md flex flex-col">
+          <button type="button" onclick="toggleSectionAccordion('res-card-body', 'res-card-arrow', 'res-card-text')" class="w-full flex items-center justify-between border-b border-stone-200 pb-2.5 text-left cursor-pointer transition shrink-0">
+            <span class="font-normal text-sm text-[#382613] flex items-center gap-2">
+              <i data-lucide="utensils" class="w-4 h-4 text-amber-700"></i> 行程已預約名店 (3 處)
+            </span>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-light">已完成預訂</span>
+              <span class="md:hidden text-[10px] px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 font-light">
+                <span id="res-card-text">展開</span>
+                <i id="res-card-arrow" data-lucide="chevron-down" class="w-3 h-3 transition-transform duration-300"></i>
+              </span>
+            </div>
+          </button>
+
+          <div id="res-card-body" class="hidden md:block space-y-2.5 font-light pt-3">
+            <!-- Day 1 Shidare -->
+            <div class="p-2.5 bg-[#fff8f5] rounded-2xl border border-[#f5cfc4] flex items-center justify-between gap-2">
+              <div>
+                <span class="px-1.5 py-0.5 rounded bg-[#f7d6cb] text-[#96371c] text-[10px]">Day 1 · 17:30</span>
+                <p class="font-normal text-stone-800 text-xs mt-0.5">焼肉 垂れ桜 (Yakiniku Shidare)</p>
+                <p class="text-[10px] text-stone-500">福岡市中央區警固 1-13-9</p>
+              </div>
+              <a href="https://www.tablecheck.com/zh-TW/reservation/WNZJQK" target="_blank" class="px-3 py-1 bg-[#e07a5f] hover:bg-[#cf6b50] text-white rounded-xl text-[10px] shrink-0 transition">
+                預約單
+              </a>
+            </div>
+
+            <!-- Day 3 Itoshima -->
+            <div class="p-2.5 bg-[#f0f8fd] rounded-2xl border border-[#c4e3f8] flex items-center justify-between gap-2">
+              <div>
+                <span class="px-1.5 py-0.5 rounded bg-[#d2ebfb] text-[#1b5b88] text-[10px]">Day 3 · 午餐已訂位</span>
+                <p class="font-normal text-stone-800 text-xs mt-0.5">糸島海鮮堂 二見浦本店</p>
+                <p class="text-[10px] text-stone-500">西區大字小田 2206-1</p>
+              </div>
+              <button onclick="googleMapsSearch('糸島海鮮堂 二見浦本店')" class="px-3 py-1 bg-[#2582be] hover:bg-[#1f6f9e] text-white rounded-xl text-[10px] shrink-0 transition">
+                一鍵導航
+              </button>
+            </div>
+
+            <!-- Day 4 Minami no Kaze -->
+            <div class="p-2.5 bg-[#f4f9f0] rounded-2xl border border-[#d2e8c6] flex items-center justify-between gap-2">
+              <div>
+                <span class="px-1.5 py-0.5 rounded bg-[#def0ce] text-[#3e751e] text-[10px]">Day 4 · 18:30 已預訂</span>
+                <p class="font-normal text-stone-800 text-xs mt-0.5">Restaurant Minami no Kaze (南之風)</p>
+                <p class="text-[10px] text-stone-500">由布市湯布院町川南</p>
+              </div>
+              <button onclick="googleMapsSearch('Minami no Kaze 由布院')" class="px-3 py-1 bg-[#5e9634] hover:bg-[#50802b] text-white rounded-xl text-[10px] shrink-0 transition">
+                一鍵導航
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 02: DAILY ITINERARY & ROUTES -->
+    <section id="daily-itinerary-section" class="space-y-4 pt-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-white text-[#4a3416] flex items-center justify-center font-normal text-base shadow-md shrink-0 border border-[#dfc384]">
+            02
+          </div>
+          <div>
+            <h2 class="text-base sm:text-lg font-normal text-[#382613] tracking-wider flex items-center gap-2 flex-wrap">
+              <span>DAILY ITINERARY & ROUTES!</span>
+              <span class="text-xs font-light text-[#593d17] bg-[#fcedc7] px-2.5 py-0.5 rounded-full whitespace-nowrap border border-[#ebd8ab]">
+                每日行程漫步
+              </span>
+            </h2>
+            <p class="text-xs font-light text-[#5f4422]">
+              當日行程時間軸、路線指引與互動地圖導航
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Day Timeline & Map Grid (Fully structured, avoiding overlap) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        
+        <!-- Left: Active Day Spots List (lg:col-span-7) -->
+        <div class="lg:col-span-7 space-y-4 w-full">
+          <!-- Active Day Header Card -->
+          <div class="bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md space-y-2">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span id="active-day-badge" class="px-3 py-1 rounded-xl text-xs font-normal bg-[#fcedc7] text-[#6b4712] tracking-wider border border-[#e8d5aa]">
+                  DAY 1
+                </span>
+                <span id="active-day-date" class="text-xs font-light text-[#73532c]">9/27 (日)</span>
+              </div>
+              <span id="active-day-transport-badge" class="px-2.5 py-1 rounded-xl text-xs font-light bg-[#eef7e4] text-[#4d7d1e] flex items-center gap-1 border border-[#cbe6b3]">
+                <i data-lucide="subway" class="w-3.5 h-3.5"></i> 地鐵 / 巴士
+              </span>
+            </div>
+            <h3 id="active-day-title" class="text-base sm:text-lg font-normal text-[#382613] leading-snug pt-1">
               抵達福岡 ➔ Mitsui Shopping Park LaLaport 福岡 ➔ 天神燒肉垂榕
             </h3>
-            <p id="active-day-desc" class="text-xs font-light text-[#73532c]">
-              住宿：博多區綱場町 4−15 3F
+            <p id="active-day-hotel" class="text-xs font-light text-stone-600">
+              住宿：博多區綱場町 4−15 3F (Tsunabamachi 4-15 3F)
             </p>
           </div>
 
-          <!-- Spot Cards List -->
-          <div class="space-y-4" id="timeline-spots-list">
-            <!-- Populated by JavaScript -->
+          <!-- Timeline Spots List -->
+          <div id="timeline-spots-list" class="space-y-4">
+            <!-- Dynamically rendered -->
           </div>
-
         </div>
 
-        <!-- Right: Leaflet Map & Accommodation Quick Nav -->
-        <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-6">
-          
+        <!-- Right: Map & 3 Accommodations Quick Navigator (lg:col-span-5) -->
+        <div class="lg:col-span-5 space-y-4 w-full lg:sticky lg:top-20">
           <!-- Map Card -->
           <div class="bg-white rounded-3xl border border-[#dfc384] shadow-md overflow-hidden">
-            <div class="p-3.5 border-b border-stone-200 flex items-center justify-between bg-stone-50">
-              <div class="flex items-center gap-2 text-xs font-normal text-[#473117]">
-                <i data-lucide="map" class="w-4 h-4 text-[#74a838]"></i>
-                <span>當日行程軌跡與景點</span>
-              </div>
-              <button onclick="resetMapView()" class="text-xs text-[#7a5824] hover:text-[#523914] font-light flex items-center gap-1">
-                <i data-lucide="locate" class="w-3.5 h-3.5"></i> 重設視野
+            <div class="p-3.5 border-b border-stone-200 flex items-center justify-between bg-[#fffdfa]">
+              <span class="text-xs font-normal text-[#382613] flex items-center gap-1.5">
+                <i data-lucide="map" class="w-4 h-4 text-emerald-600"></i> 當日行程軌跡與地圖
+              </span>
+              <button onclick="resetMapView()" class="text-xs text-amber-800 hover:underline font-light flex items-center gap-1">
+                <i data-lucide="locate" class="w-3 h-3"></i> 重設視野
               </button>
             </div>
-            
-            <div id="map-container"></div>
-
-            <div class="p-2.5 bg-stone-50 text-[11px] font-light text-stone-600 flex items-center justify-between border-t border-stone-200">
-              <span>● 點擊數字標記查看詳情</span>
-              <span>- - 建議路線</span>
-            </div>
+            <div id="map-container" class="bg-[#fcf8ef]"></div>
           </div>
 
-          <!-- 3 Accommodations Quick Access Card -->
-          <div class="bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md space-y-3">
-            <div class="flex items-center justify-between">
-              <h4 class="text-sm font-normal text-[#382613] flex items-center gap-2 whitespace-nowrap">
-                <i data-lucide="hotel" class="w-4 h-4 text-[#74a838]"></i>
-                <span>3 處住宿地址一鍵導航</span>
-              </h4>
-              <span class="text-[11px] font-light px-2 py-0.5 rounded-full bg-[#fcedc7] text-[#6b4712] whitespace-nowrap border border-[#ebd8ab]">
-                民宿與飯店
+          <!-- 3 Accommodations Quick Nav Card -->
+          <div class="bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md space-y-3 text-xs">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-2.5">
+              <span class="font-normal text-sm text-[#382613] flex items-center gap-1.5">
+                <i data-lucide="hotel" class="w-4 h-4 text-emerald-600"></i> 3 處住宿一鍵導航
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 font-light">全部確認</span>
+            </div>
+
+            <!-- Stay 1 -->
+            <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 space-y-1">
+              <div class="flex justify-between items-center">
+                <span class="font-normal text-stone-800">9/27 - 9/29 綱場町民宿 (2晚)</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-800">中洲川端</span>
+              </div>
+              <p class="text-[11px] text-stone-500 font-light">博多區綱場町 4−15 3F</p>
+              <button onclick="googleMapsSearch('Tsunabamachi 4-15 Fukuoka')" class="text-amber-800 hover:underline text-[11px] font-light flex items-center gap-1 pt-1">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至綱場町
+              </button>
+            </div>
+
+            <!-- Stay 2 -->
+            <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 space-y-1">
+              <div class="flex justify-between items-center">
+                <span class="font-normal text-stone-800">9/29 - 9/30 因內斯特飯店 (1晚)</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-800">博多住吉</span>
+              </div>
+              <p class="text-[11px] text-stone-500 font-light">INNEST HAKATA (博多區住吉 2-14-19)</p>
+              <button onclick="googleMapsSearch('INNEST HAKATA 福岡')" class="text-amber-800 hover:underline text-[11px] font-light flex items-center gap-1 pt-1">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至因內斯特
+              </button>
+            </div>
+
+            <!-- Stay 3 -->
+            <div class="p-3 bg-stone-50 rounded-2xl border border-stone-200 space-y-1">
+              <div class="flex justify-between items-center">
+                <span class="font-normal text-stone-800">9/30 - 10/2 由布院溫泉民宿 (2晚)</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">大分由布院</span>
+              </div>
+              <p class="text-[11px] text-stone-500 font-light">由布市湯布院町川北 383-2</p>
+              <button onclick="googleMapsSearch('383-2 Yufuincho Kawakita Yufu Oita')" class="text-amber-800 hover:underline text-[11px] font-light flex items-center gap-1 pt-1">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至由布院川北
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 03: SHOPPING WISH LIST -->
+    <section class="space-y-4 pt-6">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-white text-[#4a3416] flex items-center justify-center font-normal text-base shadow-md shrink-0 border border-[#dfc384]">
+            03
+          </div>
+          <div>
+            <div class="flex items-center gap-2.5 flex-wrap">
+              <h2 class="text-base sm:text-lg font-normal text-[#382613] tracking-wider whitespace-nowrap">
+                SHOPPING WISH LIST!
+              </h2>
+              <span class="text-[11px] font-light text-[#593d17] bg-[#fcedc7] px-2.5 py-0.5 rounded-full whitespace-nowrap border border-[#ebd8ab]">
+                心願採買清單（Cherry & Jerry）
               </span>
             </div>
-
-            <div class="space-y-2.5 text-xs">
-              <!-- Stay 1 -->
-              <div class="p-3 rounded-2xl bg-[#fafaf9] border border-stone-200 space-y-1">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                  <span class="font-normal text-[#382613]">9/27 - 9/29 綱場町民宿 (2晚)</span>
-                  <span class="text-[10px] font-light px-2 py-0.2 rounded bg-amber-100 text-amber-800 self-start sm:self-auto">中洲川端 / 吳服町</span>
-                </div>
-                <p class="text-[11px] font-light text-stone-600">博多區綱場町 4−15 3F</p>
-                <button onclick="googleMapsSearch('Tsunabamachi 4-15 Fukuoka')" class="text-[#0369a1] hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
-                  <i data-lucide="navigation" class="w-3 h-3"></i> 一鍵導航至綱場町
-                </button>
-              </div>
-
-              <!-- Stay 2: INNEST HAKATA -->
-              <div class="p-3 rounded-2xl bg-[#fafaf9] border border-stone-200 space-y-1">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                  <span class="font-normal text-[#382613]">9/29 - 9/30 因內斯特飯店 - 博多 (1晚)</span>
-                  <span class="text-[10px] font-light px-2 py-0.2 rounded bg-blue-100 text-blue-800 self-start sm:self-auto">博多 / 住吉</span>
-                </div>
-                <p class="text-[11px] font-light text-stone-600">INNEST HAKATA (福岡市博多區住吉 2-14-19)</p>
-                <button onclick="googleMapsSearch('INNEST HAKATA 福岡')" class="text-[#0369a1] hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
-                  <i data-lucide="navigation" class="w-3 h-3"></i> 一鍵導航至因內斯特飯店
-                </button>
-              </div>
-
-              <!-- Stay 3: Yufuin -->
-              <div class="p-3 rounded-2xl bg-[#fafaf9] border border-stone-200 space-y-1">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                  <span class="font-normal text-[#382613]">9/30 - 10/2 由布院溫泉民宿 (2晚)</span>
-                  <span class="text-[10px] font-light px-2 py-0.2 rounded bg-emerald-100 text-emerald-800 self-start sm:self-auto">大分由布院</span>
-                </div>
-                <p class="text-[11px] font-light text-stone-600">大分縣由布市湯布院町川北 383-2</p>
-                <button onclick="googleMapsSearch('383-2 Yufuincho Kawakita Yufu Oita')" class="text-[#0369a1] hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
-                  <i data-lucide="navigation" class="w-3 h-3"></i> 一鍵導航至由布院川北民宿
-                </button>
-              </div>
-
-            </div>
+            <p class="text-xs font-light text-[#5f4422]">
+              共 22 項推薦好物 · 已依動線分流至最順路天數並列出所有經過可買分店
+            </p>
           </div>
-
         </div>
 
+        <span class="text-xs px-3.5 py-1.5 rounded-full bg-white text-[#802f1f] font-light shadow-2xs hidden sm:inline whitespace-nowrap border border-[#e5a293]">
+          分天順路列出 · 一鍵開啟導航
+        </span>
       </div>
 
-      <!-- Section 03 Header -->
-      <div class="flex items-center gap-3 pt-6">
-        <div class="w-10 h-10 rounded-full bg-white text-[#4a3416] flex items-center justify-center font-normal text-base shadow-md shrink-0">
-          03
-        </div>
-        <div>
-          <div class="flex items-center gap-2.5 flex-wrap">
-            <h2 class="text-base sm:text-lg font-normal text-[#382613] tracking-widest whitespace-nowrap">
-              SHOPPING WISH LIST!
-            </h2>
-            <span class="text-[11px] font-light text-[#593d17] bg-[#fcedc7] px-2.5 py-0.5 rounded-full whitespace-nowrap border border-[#ebd8ab]">
-              心願採買清單（Cherry & Jerry）
-            </span>
-          </div>
-          <p class="text-xs font-light text-[#5f4422]">
-            共 20 項推薦好物 · 已依動線分流至最順路天數
-          </p>
+      <!-- Drag-Scroll Filter Pills Container (NO SCROLLBAR, Natural Drag) -->
+      <div class="relative py-1">
+        <div id="shopping-pills-drag" class="flex items-center gap-2 overflow-x-auto no-scrollbar drag-scroll-container pb-2 pt-1 no-print">
+          <button onclick="filterShoppingDay('all')" data-shop-day="all" class="shop-filter-btn px-4 py-2 rounded-full text-xs font-normal transition bg-[#1e293b] text-white shadow-2xs whitespace-nowrap shrink-0">
+            全部顯示 (22 項)
+          </button>
+          <button onclick="filterShoppingDay('day1')" data-shop-day="day1" class="shop-filter-btn px-4 py-2 rounded-full text-xs font-light transition bg-white text-[#382613] hover:bg-stone-100 shadow-2xs whitespace-nowrap shrink-0 border border-[#ebd8ab]">
+            Day 1 市區 (LaLaport & 天神)
+          </button>
+          <button onclick="filterShoppingDay('day2')" data-shop-day="day2" class="shop-filter-btn px-4 py-2 rounded-full text-xs font-light transition bg-white text-[#382613] hover:bg-stone-100 shadow-2xs whitespace-nowrap shrink-0 border border-[#ebd8ab]">
+            Day 2 博多區 (川端通 & 運河城)
+          </button>
+          <button onclick="filterShoppingDay('day3')" data-shop-day="day3" class="shop-filter-btn px-4 py-2 rounded-full text-xs font-light transition bg-white text-[#382613] hover:bg-stone-100 shadow-2xs whitespace-nowrap shrink-0 border border-[#ebd8ab]">
+            Day 3 租車日 (博多站周邊)
+          </button>
+          <button onclick="filterShoppingDay('day5')" data-shop-day="day5" class="shop-filter-btn px-4 py-2 rounded-full text-xs font-light transition bg-white text-[#382613] hover:bg-stone-100 shadow-2xs whitespace-nowrap shrink-0 border border-[#ebd8ab]">
+            Day 5 溫泉鄉 (由布院 湯之坪)
+          </button>
+          <button onclick="filterShoppingDay('day6')" data-shop-day="day6" class="shop-filter-btn px-4 py-2 rounded-full text-xs font-light transition bg-white text-[#382613] hover:bg-stone-100 shadow-2xs whitespace-nowrap shrink-0 border border-[#ebd8ab]">
+            Day 6 回程日 (福岡機場)
+          </button>
         </div>
       </div>
 
-      <!-- 3 Shopping Columns (LaLaport/Tenjin, Canal City, Airport) -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+      <!-- Shopping Columns (Responsive Grid, Clean Cards) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-xs">
         
-        <!-- Day 1 Shopping -->
-        <div class="bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md space-y-3">
+        <!-- Day 1 Card -->
+        <div data-shop-day="day1" class="shop-day-card bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md space-y-3">
           <div class="flex items-center justify-between border-b border-stone-200 pb-2">
-            <span class="font-normal text-[#382613] flex items-center gap-1.5">
+            <span class="font-normal text-[#382613] flex items-center gap-1.5 text-sm">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Day 1 市區 (LaLaport & 天神)
             </span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-light">8 項</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-light whitespace-nowrap">8 項首選</span>
           </div>
 
-          <ul class="space-y-2.5">
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>阿卡醬本舖 (akachan honpo)</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">玩具衣服</span>
+          <ul class="space-y-3">
+            <!-- Akachan -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">阿卡醬本舖 (akachan honpo)</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">LaLaport 福岡 3F (下機第一站順路買齊)</p>
-              <button onclick="googleMapsSearch('アカチャンホンポ ららぽーと福岡店')" class="text-emerald-700 hover:underline font-light flex items-center gap-1 text-[11px]">
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點</strong>：LaLaport 福岡 3F (下機首站直達，空間寬敞推車方便)</p>
+              <button onclick="googleMapsSearch('アカチャンホンポ ららぽーと福岡店')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
                 <i data-lucide="navigation" class="w-3 h-3"></i> 導航至 LaLaport 阿卡醬
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>西川枕頭 (nishikawa)</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">枕頭</span>
+            <!-- Nishikawa Tenjin -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">西川枕頭 (nishikawa)</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">天神平和大樓 1F (天神站14號出口直達)</p>
-              <button onclick="googleMapsSearch('nishikawa ショールーム 福岡')" class="text-emerald-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至西川枕頭展廳
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1 (首選)</strong>：天神平和大樓 1F（天神站 14 號出口直達）</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2 (備選)</strong>：博多阪急 7F 西川睡眠專櫃（Day 2/3 經過）</p>
+              <button onclick="googleMapsSearch('nishikawa ショールーム 福岡')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至天神旗艦展廳
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>MOGU 機能舒眠枕 / 美臀抱枕</span>
-                  <span class="text-[10px] px-1.5 rounded bg-blue-100 text-blue-700">Jerry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">枕頭</span>
+            <!-- MOGU -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">MOGU 舒眠枕 / 美臀靠枕</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">天神 INCUBE 4F 生活雜貨專區 (或博多站 HANDS 4F)</p>
-              <button onclick="googleMapsSearch('インキューブ 天神店 MOGU')" class="text-emerald-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至 INCUBE 天神店
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1 (首選)</strong>：INCUBE 天神店 4F 家居雜貨（Solaria Stage 內）</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2 (備選)</strong>：HANDS 博多店 4F（JR 博多城 AMU PLAZA）</p>
+              <button onclick="googleMapsSearch('インキューブ天神店')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至天神 INCUBE
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>治一郎 年輪蛋糕</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">甜點</span>
+            <!-- Jiichiro -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">治一郎 年輪蛋糕 (Jiichiro)</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">天神大丸百貨 B2F 專櫃</p>
-              <button onclick="googleMapsSearch('治一郎 福岡三越 大丸')" class="text-emerald-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至治一郎專櫃
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1 (首選)</strong>：天神大丸百貨 B2F 專櫃</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2 (備選)</strong>：JR 博多站 DEITOS 1F（いっぴん通り）</p>
+              <button onclick="googleMapsSearch('治一郎 福岡三越 大丸')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至天神專櫃
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>黛珂蜜粉 (DECORTÉ)</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">化妝品</span>
+            <!-- DECORTÉ -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">黛珂蜜粉 (DECORTÉ)</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">天神岩田屋百貨本館 1F / 大丸百貨 1F</p>
-              <button onclick="googleMapsSearch('コスメデコルテ 岩田屋本店')" class="text-emerald-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至黛珂專櫃
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1</strong>：岩田屋本店本館 1F / 福岡三越 1F</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2</strong>：福岡機場國際線出境免稅店（Day 6 可補買）</p>
+              <button onclick="googleMapsSearch('コスメデコルテ 岩田屋本店')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至岩田屋黛珂專櫃
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>KANEBO 黑皂洗面乳</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">日用品</span>
+            <!-- Panasonic EH-NA0K -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">Panasonic EH-NA0K 吹風機</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 whitespace-nowrap">Jerry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">天神地下街 松本清 / 大丸專櫃</p>
-              <button onclick="googleMapsSearch('KANEBO 天神大丸')" class="text-emerald-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至專櫃
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1 (首選)</strong>：Bic Camera 天神2號館（近垂櫻燒肉，享免稅+折扣）</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2</strong>：LaLaport 3F Kojima×Bic Camera / Yodobashi 博多店</p>
+              <button onclick="googleMapsSearch('ビックカメラ 天神2号館')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至 Bic Camera 天神2號館
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>花王 Deep Green 藥用牙膏</span>
-                  <span class="text-[10px] px-1.5 rounded bg-blue-100 text-blue-700">Jerry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">日用品</span>
+            <!-- Toothpaste & Deodorant -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">花王牙膏 ＆ Deonatulle 止汗膏</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 whitespace-nowrap">Jerry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">天神地下街 松本清 / 警固大國藥妝</p>
-              <button onclick="googleMapsSearch('マツモトキヨシ 天神地下街店')" class="text-emerald-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至天神藥妝店
-              </button>
-            </li>
-
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>Deonatulle 止汗膏 (消臭石)</span>
-                  <span class="text-[10px] px-1.5 rounded bg-blue-100 text-blue-700">Jerry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">日用品</span>
-              </div>
-              <p class="text-[11px] text-stone-600 font-light">天神地下街藥妝 / 唐吉訶德福岡天神本店</p>
-              <button onclick="googleMapsSearch('ドン・キホーテ 福岡天神本店')" class="text-emerald-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至唐吉訶德天神
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1</strong>：天神地下街松本清 / 警固大國藥妝</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2</strong>：唐吉訶德福岡天神本店 (24H) / 中洲店</p>
+              <button onclick="googleMapsSearch('ドン・キホーテ 福岡天神本店')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至唐吉訶德天神本店
               </button>
             </li>
           </ul>
         </div>
 
-        <!-- Day 2 Shopping (Canal City & Kawabata) -->
-        <div class="bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md space-y-3">
+        <!-- Day 2 Card -->
+        <div data-shop-day="day2" class="shop-day-card bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md space-y-3">
           <div class="flex items-center justify-between border-b border-stone-200 pb-2">
-            <span class="font-normal text-[#382613] flex items-center gap-1.5">
+            <span class="font-normal text-[#382613] flex items-center gap-1.5 text-sm">
               <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span> Day 2 博多區 (川端通 & 運河城)
             </span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 font-light">10 項</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 font-light whitespace-nowrap">7 項首選</span>
           </div>
 
-          <ul class="space-y-2.5">
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>On 昂跑球鞋</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">鞋子</span>
+          <ul class="space-y-3">
+            <!-- On & Hoka -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">On 昂跑 ＆ Hoka 球鞋</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 whitespace-nowrap">Jerry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">博多運河城 Alpen FUKUOKA 旗艦店 2F-3F</p>
-              <button onclick="googleMapsSearch('Alpen FUKUOKA キャナルシティ博多')" class="text-sky-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至 Alpen On 專區
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點</strong>：博多運河城 Alpen FUKUOKA 旗艦店 2F-3F（九州最大，兩牌相鄰可同試）</p>
+              <button onclick="googleMapsSearch('Alpen FUKUOKA キャナルシティ博多')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至 Alpen 旗艦店
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>Hoka 球鞋 (戶外慢跑)</span>
-                  <span class="text-[10px] px-1.5 rounded bg-blue-100 text-blue-700">Jerry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">鞋子</span>
+            <!-- Onitsuka Tiger -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">鬼塚虎 (Onitsuka Tiger)</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 whitespace-nowrap">必逛</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">博多運河城 Alpen FUKUOKA 2F (與 On 同層)</p>
-              <button onclick="googleMapsSearch('Alpen FUKUOKA キャナルシティ博多')" class="text-sky-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至 Alpen Hoka 專區
-              </button>
-            </li>
-
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>鬼塚虎 (Onitsuka Tiger)</span>
-                  <span class="text-[10px] px-1.5 rounded bg-amber-100 text-amber-800">必逛</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">鞋子</span>
-              </div>
-              <p class="text-[11px] text-stone-600 font-light">博多運河城 ノースビル (North Bldg) 2F</p>
-              <button onclick="googleMapsSearch('オニツカタイガー キャナルシティ博多')" class="text-sky-700 hover:underline font-light flex items-center gap-1 text-[11px]">
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1 (首選)</strong>：博多運河城 North Bldg 2F</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2 (備選)</strong>：福岡 PARCO 本館 3F（Day 1 天神經過）</p>
+              <button onclick="googleMapsSearch('オニツカタイガー キャナルシティ博多')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
                 <i data-lucide="navigation" class="w-3 h-3"></i> 導航至運河城鬼塚虎
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>ABC-MART GRAND STAGE</span>
-                  <span class="text-[10px] px-1.5 rounded bg-amber-100 text-amber-800">球鞋旗艦</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">休閒鞋</span>
+            <!-- ABC-MART -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">ABC-MART GRAND STAGE</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 whitespace-nowrap">旗艦店</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">博多運河城 サウスビル 3F (或 Day 1 LaLaport 2F)</p>
-              <button onclick="googleMapsSearch('ABC-MART GRAND STAGE キャナルシティ博多店')" class="text-sky-700 hover:underline font-light flex items-center gap-1 text-[11px]">
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1 (首選)</strong>：博多運河城 South Bldg 3F</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2</strong>：LaLaport 福岡 2F / 天神西通旗艦店</p>
+              <button onclick="googleMapsSearch('ABC-MART GRAND STAGE キャナルシティ博多店')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
                 <i data-lucide="navigation" class="w-3 h-3"></i> 導航至運河城 ABC-MART
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>八女茶 & 茶製品</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">茶</span>
+            <!-- Yame Tea -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">八女茶 ＆ 茶製品</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">上川端商店街「光安青霞園茶舖」</p>
-              <button onclick="googleMapsSearch('光安青霞園茶舗 川端店')" class="text-sky-700 hover:underline font-light flex items-center gap-1 text-[11px]">
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點</strong>：上川端商店街「光安青霞園茶舖」或「星野製茶園」</p>
+              <button onclick="googleMapsSearch('光安青霞園茶舗 川端店')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
                 <i data-lucide="navigation" class="w-3 h-3"></i> 導航至川端老字號茶舖
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>博多通りもん (明月堂)</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">和菓子</span>
+            <!-- Meigetsudo -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">博多通りもん (明月堂)</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">明月堂 川端店 (川端通商店街內)</p>
-              <button onclick="googleMapsSearch('明月堂 川端店')" class="text-sky-700 hover:underline font-light flex items-center gap-1 text-[11px]">
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1 (現吃)</strong>：明月堂 川端店（商店街內現買現吃）</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2 (伴手禮)</strong>：福岡機場國際線免稅店（Day 6 免稅一次買）</p>
+              <button onclick="googleMapsSearch('明月堂 川端店')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
                 <i data-lucide="navigation" class="w-3 h-3"></i> 導航至明月堂川端店
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>如水庵 筑紫糬 (Tsukushi)</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">和菓子</span>
+            <!-- Niwaka Senbei & Yamaya -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">二〇加煎餅 ＆ Yamaya 仙貝</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 whitespace-nowrap">Jerry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">如水庵 博多車站前本店 / 運河城名產專櫃</p>
-              <button onclick="googleMapsSearch('如水庵 博多駅前本店')" class="text-sky-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至如水庵總店
-              </button>
-            </li>
-
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>東雲堂 二〇加煎餅</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">和菓子</span>
-              </div>
-              <p class="text-[11px] text-stone-600 font-light">川端通商店街名產舖 / 運河城 B1 土產區</p>
-              <button onclick="googleMapsSearch('東雲堂 博多駅')" class="text-sky-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至東雲堂門市
-              </button>
-            </li>
-
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>Yamaya 明太子炸仙貝</span>
-                  <span class="text-[10px] px-1.5 rounded bg-blue-100 text-blue-700">Jerry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">和菓子</span>
-              </div>
-              <p class="text-[11px] text-stone-600 font-light">博多運河城 B1 土產街 / 博多站伴手禮街</p>
-              <button onclick="googleMapsSearch('やまや キャナルシティ博多')" class="text-sky-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至 Yamaya 門市
-              </button>
-            </li>
-
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>京喚羽 TOKIO 護髮系列</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">日用品</span>
-              </div>
-              <p class="text-[11px] text-stone-600 font-light">博多運河城 @cosme STORE / Ainz & Tulpe</p>
-              <button onclick="googleMapsSearch('アットコスメストア キャナルシティ博多')" class="text-sky-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至運河城 @cosme
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1</strong>：博多運河城 B1 土產街 / 川端通名產舖</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2</strong>：福岡機場免稅店</p>
+              <button onclick="googleMapsSearch('やまや キャナルシティ博多')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至 Yamaya 運河城店
               </button>
             </li>
           </ul>
         </div>
 
-        <!-- Day 6 Shopping (Airport) -->
-        <div class="bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md space-y-3">
+        <!-- Day 3, 5, 6 Combined Card -->
+        <div data-shop-day="day3 day5 day6" class="shop-day-card bg-white rounded-3xl p-5 border border-[#dfc384] shadow-md space-y-3">
           <div class="flex items-center justify-between border-b border-stone-200 pb-2">
-            <span class="font-normal text-[#382613] flex items-center gap-1.5">
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Day 6 回程日 (福岡機場)
+            <span class="font-normal text-[#382613] flex items-center gap-1.5 text-sm">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-600"></span> Day 3·5·6 (博多/由布院/機場)
             </span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-light">3 項＋免稅</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-light whitespace-nowrap">7 項精華</span>
           </div>
 
-          <ul class="space-y-2.5">
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>吉野堂 名物小雞饅頭 (ひよ子)</span>
-                  <span class="text-[10px] px-1.5 rounded bg-blue-100 text-blue-700">Jerry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">和菓子</span>
+          <ul class="space-y-3">
+            <!-- B-Speak Roll Cake (Day 5 Yufuin) -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-emerald-300 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-amber-900 font-medium text-xs">B-Speak 蛋糕捲 (P-roll 本店)</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                </div>
               </div>
-              <p class="text-[11px] text-stone-600 font-light">福岡機場國際線免稅店 / 國內線 2F 伴手禮街</p>
-              <button onclick="googleMapsSearch('ひよ子本舗吉野堂 福岡空港店')" class="text-amber-700 hover:underline font-light flex items-center gap-1 text-[11px]">
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>購買地點</strong>：由布市湯布院町川上 3040-2（湯之坪街道入口處）</p>
+              <p class="text-[10px] text-stone-500 font-light leading-relaxed">
+                💡 頂級山莊無量塔名作！單片（1/3切片）極易在中午前售完，建議上午金鱗湖漫步時先買；整條可帶回民宿配溫泉當下午茶！
+              </p>
+              <button onclick="googleMapsSearch('B-speak 由布院')" class="text-emerald-700 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至 B-Speak 本店
+              </button>
+            </li>
+
+            <!-- Mikadukiya Croissant -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">三日月屋 天然酵母可頌</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                </div>
+              </div>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 1 (Day 3)</strong>：JR 博多站 1F いっぴん西通り店 (租車前當早餐)</p>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點 2 (Day 6)</strong>：福岡機場國內線 2F 門市 (搭機前伴手禮)</p>
+              <button onclick="googleMapsSearch('三日月屋 いっぴん西通り店')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至博多站西通り店
+              </button>
+            </li>
+
+            <!-- Tsukushi Mochi -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">如水庵 筑紫糬 (總店)</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-pink-100 text-pink-700 whitespace-nowrap">Cherry</span>
+                </div>
+              </div>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點</strong>：如水庵 博多車站前本店（博多站前2丁目，距租車門市步行 3 分鐘）</p>
+              <button onclick="googleMapsSearch('如水庵 博多駅前本店')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
+                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至如水庵總店
+              </button>
+            </li>
+
+            <!-- Hiyoko -->
+            <li class="p-3 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1.5">
+              <div class="flex justify-between items-center font-normal text-[#382613]">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-xs">吉野堂 名物小雞饅頭 (ひよ子)</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 whitespace-nowrap">Jerry</span>
+                </div>
+              </div>
+              <p class="text-[11px] text-stone-600 font-light">📍 <strong>經過地點</strong>：福岡機場國際線出境免稅店 / 國內線 2F</p>
+              <button onclick="googleMapsSearch('ひよ子本舗吉野堂 福岡空港店')" class="text-amber-800 hover:underline font-light flex items-center gap-1 text-[11px] pt-0.5">
                 <i data-lucide="navigation" class="w-3 h-3"></i> 導航至吉野堂機場店
               </button>
             </li>
 
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span class="flex items-center gap-1.5">
-                  <span>三日月屋 天然酵母可頌</span>
-                  <span class="text-[10px] px-1.5 rounded bg-pink-100 text-pink-700">Cherry</span>
-                </span>
-                <span class="text-stone-500 text-[10px]">和菓子</span>
-              </div>
-              <p class="text-[11px] text-stone-600 font-light">福岡機場國內線 2F 門市 (還車後搭接駁車順買)</p>
-              <button onclick="googleMapsSearch('三日月屋 福岡空港店')" class="text-amber-700 hover:underline font-light flex items-center gap-1 text-[11px]">
-                <i data-lucide="navigation" class="w-3 h-3"></i> 導航至三日月屋機場店
-              </button>
-            </li>
-
-            <li class="p-2.5 bg-[#fafaf9] rounded-2xl border border-stone-200 space-y-1">
-              <div class="flex justify-between font-normal text-[#382613]">
-                <span>國際線出境免稅店全補齊</span>
-                <span class="text-stone-500 text-[10px]">免稅店</span>
-              </div>
-              <p class="text-[11px] text-stone-600 font-light">福岡機場國際線 3F 出境管制區免稅大店</p>
-              <p class="text-[10px] text-stone-500 leading-relaxed pt-1">
-                💡 如水庵筑紫糬、通りもん、二〇加煎餅、Yamaya 明太子、吉野堂小雞皆可在免稅店一次買齊省去手提！
+            <!-- Airport Duty Free Summary -->
+            <li class="p-3 bg-[#fdfaf3] rounded-2xl border border-amber-200 space-y-1">
+              <span class="font-normal text-amber-900 text-xs">✈️ Day 6 福岡機場出境免稅大店 (3F)</span>
+              <p class="text-[11px] text-stone-600 font-light leading-relaxed">
+                通關後所有和菓子伴手禮（通りもん、二〇加煎餅、Yamaya 明太子仙貝、小雞饅頭、黛珂化妝品）皆可免稅一次帶齊直接提上機，省手提重量！
               </p>
             </li>
           </ul>
         </div>
 
       </div>
+    </section>
 
-    </div>
   </main>
 
   <!-- Footer -->
-  <footer class="bg-[#1b324b] text-[#d6e2ee] py-6 text-xs font-light no-print">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+  <footer class="mt-auto border-t-2 border-[#caa031] bg-[#422e17] text-[#edd9b2] py-8 text-xs font-light no-print">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-2">
-        <i data-lucide="compass" class="w-4 h-4 text-[#e8b73f]"></i>
-        <span class="text-white">福岡·糸島·由布院 九州自由行 街道漫步與自駕指南 · 2026</span>
+        <i data-lucide="compass" class="w-4 h-4 text-amber-400"></i>
+        <span class="font-normal text-white">福岡·糸島·由布院 九州自由行指南 · 2026</span>
       </div>
-      <p class="text-[#9cb5cc]">祝 Cherry & Jerry 旅途平安順心 · 玩得愉快！</p>
+      <p class="text-stone-300">祝 Cherry & Jerry 旅途愉快、順心如意！</p>
     </div>
   </footer>
 
-  <!-- Master JavaScript Application Logic -->
   <script>
+    // Trip Data Model
     const tripData = {
+      title: "福岡·糸島·由布院 九州自由行",
       currentDay: 1,
       days: [
         {
           day: 1,
           date: "9/27 (日)",
           title: "抵達福岡 ➔ Mitsui Shopping Park LaLaport 福岡 ➔ 天神燒肉垂榕",
-          transportSummary: "地鐵 / 巴士",
+          transportSummary: "地鐵 / 西鐵巴士 / 計程車",
           transportType: "subway",
           hotel: "博多區綱場町 4−15 3F (Tsunabamachi 4-15 3F)",
           spots: [
@@ -860,15 +830,15 @@
               id: "s-1-1",
               period: "上午",
               time: "09:35 抵達",
-              title: "09:35 抵達福岡機場 (FUK IT240) ➔ Mitsui Shopping Park LaLaport 福岡",
-              transit: "搭乘虎航 IT240 抵達國際線航廈。入境後於國際線巴士站搭「西鐵直達公車」約 15 分鐘直達 LaLaport 福岡；亦可搭航廈接駁公車至國內線轉地鐵機場線至博多站轉公車或轉 JR 至「竹下站」步行約 9 分鐘",
+              title: "09:35 抵達福岡機場 (IT240) ➔ LaLaport 福岡 (實物大鋼彈)",
+              transit: "入境後於國際線巴士站直接搭乘「西鐵直達公車」約 15 分鐘直達 LaLaport 福岡；亦可搭接駁車至國內線轉乘【地鐵機場線】至博多站",
               dining: "LaLaport 美食街 (久留米拉麵 / 炸豬排)",
               category: "shopping",
-              notes: "朝聖 1:1 實物大 ν鋼彈立像 (RX-93ff) 與 4F GUNDAM SIDE-F。順路採買：3F 阿卡醬本舖 (akachan honpo) 與 2F ABC-MART GRAND STAGE！",
+              notes: "朝聖 1:1 實物大 ν鋼彈立像與 GUNDAM SIDE-F。順路採買：3F 阿卡醬本舖、2F ABC-MART GRAND STAGE、3F Kojima×Bic Camera！",
               lat: 33.565400,
               lng: 130.441100,
               navLocations: [
-                { name: "LaLaport 福岡 (實物大鋼彈)", query: "三井ショッピングパーク ららぽーと福岡" },
+                { name: "LaLaport 福岡 (鋼彈立像)", query: "三井ショッピングパーク ららぽーと福岡" },
                 { name: "福岡機場國際線航廈", query: "Fukuoka Airport International Terminal" }
               ]
             },
@@ -877,14 +847,14 @@
               period: "下午",
               time: "15:00",
               title: "15:00 飯店 Check-in ➔ 補眠充電消除飛行疲勞",
-              transit: "從 LaLaport 搭西鐵公車回博多站，轉地下鐵機場線至「中洲川端站」7號出口步行 4 分鐘（或箱崎線「吳服町站」步行 3 分鐘抵達綱場町）",
+              transit: "搭巴士至博多站，轉乘【地鐵機場線】至「中洲川端站」7號出口步行 4 分鐘（或搭【箱崎線】至「吳服町站」步行 3 分鐘）",
               dining: "",
               category: "hotel",
-              notes: "住宿地址：博多區綱場町 4−15 3F。先寄放行李辦理入住，稍微補眠小憩養足精神準備今晚天神美食行程！",
+              notes: "住宿地址：博多區綱場町 4−15 3F。先寄放行李入住，補眠小憩養足精神準備今晚天神美食行程！",
               lat: 33.597500,
               lng: 130.409800,
               navLocations: [
-                { name: "綱場町民宿 (Tsunabamachi 4-15 3F)", query: "Tsunabamachi 4-15 Fukuoka" }
+                { name: "綱場町民宿 (Tsunabamachi 4-15)", query: "Tsunabamachi 4-15 Fukuoka" }
               ]
             },
             {
@@ -892,16 +862,16 @@
               period: "晚上",
               time: "17:30",
               title: "17:30 天神地區 晚餐：焼肉 垂れ桜 (Yakiniku Shidare)",
-              transit: "從中洲川端站搭地下鐵機場線 1 站至「天神站」2號出口步行 10 分鐘（往西通警固方向）；或從飯店門口直接搭計程車前往（車程約 8 分鐘，車資約 ¥1,000-1,200）",
-              dining: "焼肉 垂れ桜 (中央區警固 1-13-9)",
+              transit: "從中洲川端站搭地鐵至「天神站」2號出口步行 10 分鐘；或搭計程車車程約 8 分鐘",
+              dining: "焼肉 垂れ桜 (福岡市中央區警固 1-13-9)",
               category: "food",
               bookingUrl: "https://www.tablecheck.com/zh-TW/reservation/WNZJQK",
-              notes: "已完成 17:30 預約。餐後散步至天神地下街，順道造訪 nishikawa 西川枕頭展廳 (天神平和大樓 1F) 與大丸百貨/岩田屋 (黛珂蜜粉、治一郎蛋糕)！",
+              notes: "已預約 17:30。餐後漫步天神商圈，順訪 nishikawa 西川枕頭展廳 (天神平和大樓 1F)、INCUBE (MOGU)、Bic Camera 天神2號館 (Panasonic 吹風機)！",
               lat: 33.585500,
               lng: 130.392700,
               navLocations: [
-                { name: "焼肉 垂れ桜 (Yakiniku Shidare)", query: "焼肉 垂れ桜 福岡" },
-                { name: "天神 警固公園", query: "Kego Park Fukuoka" }
+                { name: "焼肉 垂れ桜", query: "焼肉 垂れ桜 福岡" },
+                { name: "西川枕頭 天神展廳", query: "nishikawa ショールーム 福岡" }
               ]
             }
           ]
@@ -910,7 +880,7 @@
           day: 2,
           date: "9/28 (一)",
           title: "麵包超人兒童博物館 ➔ 川端通商店街 & 櫛田神社 ➔ 博多運河城購物",
-          transportSummary: "全程散步步行 / 地鐵七隈線",
+          transportSummary: "散步步行 / 地鐵七隈線",
           transportType: "subway",
           hotel: "博多區綱場町 4−15 3F (Tsunabamachi 4-15 3F)",
           spots: [
@@ -918,15 +888,15 @@
               id: "s-2-1",
               period: "上午",
               time: "10:00 (開館)",
-              title: "福岡麵包超人兒童博物館 (Anpanman Children's Museum)",
-              transit: "從綱場町民宿出發步行約 4 分鐘即抵達博多 Riverain Mall (5F-6F)，直通地下鐵「中洲川端站」",
-              dining: "果醬爺爺麵包工廠角色造型麵包",
+              title: "福岡麵包超人兒童博物館 (博多 Riverain 5-6F)",
+              transit: "從綱場町民宿出發【步行約 4 分鐘】即達博多 Riverain Mall，直通地鐵中洲川端站",
+              dining: "果醬爺爺麵包工廠造型麵包",
               category: "sightseeing",
-              notes: "10:00 開館。全天候室內玻璃帷幕商場，有麵包超人現場見面秀、角色專賣店與限定周邊。",
+              notes: "全天候室內玻璃帷幕商場，有現場見面秀、角色專賣店與限定周邊。",
               lat: 33.595600,
               lng: 130.406800,
               navLocations: [
-                { name: "福岡麵包超人兒童博物館", query: "福岡アンパンマンこどもミュージアムinモール" }
+                { name: "福岡麵包超人博物館", query: "福岡アンパンマンこどもミュージアムinモール" }
               ]
             },
             {
@@ -934,15 +904,15 @@
               period: "下午",
               time: "13:00 - 15:30",
               title: "川端通商店街 ➔ 午餐：暖暮拉麵 ➔ 櫛田神社參拜",
-              transit: "走出博多 Riverain 後直接進入「上川端商店街」，一路漫步散步約 400 公尺直通博多總鎮守「櫛田神社」",
-              dining: "餃子拉麵酒場 暖暮 (九州拉麵第一名名店，現場候位)",
+              transit: "走出博多 Riverain 後直通「上川端商店街」，一路漫步約 400 公尺至博多總鎮守「櫛田神社」",
+              dining: "餃子拉麵酒場 暖暮 (九州拉麵第一名，現場候位)",
               category: "food",
-              notes: "川端通是福岡歷史最悠久的拱廊商店街。順路採買：光安青霞園百年八女茶、明月堂川端店 (博多通りもん白餡菓子)。櫛田神社內長年展示壯觀的「飾山笠」神轎！",
+              notes: "順路採買：光安青霞園百年八女茶、明月堂川端店 (博多通りもん)。櫛田神社內展示壯觀飾山笠神轎！",
               lat: 33.593000,
               lng: 130.410600,
               navLocations: [
                 { name: "櫛田神社 (博多總鎮守)", query: "Kushida Shrine Fukuoka" },
-                { name: "餃子拉麵酒場 暖暮", query: "ラーメン暖暮 博多中洲店" }
+                { name: "川端通商店街", query: "Kawabata Shopping Arcade" }
               ]
             },
             {
@@ -950,16 +920,16 @@
               period: "晚上",
               time: "16:30 - 21:00",
               title: "博多百貨購物：博多運河城 (Canal City Hakata)",
-              transit: "從櫛田神社南門天橋步行 2 分鐘直通運河城；亦可搭地下鐵七隈線至「櫛田神社前站」1號出口",
-              dining: "運河城拉麵競技場 / B1 美食街 / 築地銀章魚燒",
+              transit: "從櫛田神社南門天橋【步行 2 分鐘】直通運河城",
+              dining: "運河城拉麵競技場 / B1 美食街",
               category: "shopping",
-              notes: "定時有大型水舞音樂噴泉秀。鞋控必逛：集結 On 昂跑 (Alpen 2F-3F)、Hoka (Alpen 2F)、鬼塚虎 Onitsuka Tiger (North Bldg 2F)、ABC-MART GRAND STAGE (South Bldg 3F)，可一站買齊並辦理退稅！",
+              notes: "大型水舞音樂噴泉秀。鞋控必逛：On 昂跑 (Alpen 2F-3F)、Hoka (Alpen 2F)、鬼塚虎 (North 2F)、ABC-MART (South 3F)，可一站退稅！",
               lat: 33.589800,
               lng: 130.411100,
               navLocations: [
-                { name: "博多運河城 (Canal City)", query: "Canal City Hakata" },
+                { name: "博多運河城", query: "Canal City Hakata" },
                 { name: "鬼塚虎 (運河城 2F)", query: "オニツカタイガー キャナルシティ博多" },
-                { name: "ABC-MART (運河城 3F)", query: "ABC-MART GRAND STAGE キャナルシティ博多店" }
+                { name: "Alpen FUKUOKA (On & Hoka)", query: "Alpen FUKUOKA キャナルシティ博多" }
               ]
             }
           ]
@@ -968,24 +938,24 @@
           day: 3,
           date: "9/29 (二)",
           title: "退房吃早餐 ➔ 博多站租車 ➔ 糸島海鮮堂＆海邊散步 ➔ 因內斯特飯店Check-in ➔ 旭軒煎餃",
-          transportSummary: "自駕開車 (福岡高速環狀線＋西九州道)",
+          transportSummary: "自駕開車 (福岡都市高速＋西九州道)",
           transportType: "car",
-          hotel: "因內斯特飯店 - 博多 (INNEST HAKATA, 福岡市博多區住吉 2-14-19)",
+          hotel: "因內斯特飯店 - 博多 (INNEST HAKATA, 博多區住吉 2-14-19)",
           spots: [
             {
               id: "s-3-1",
               period: "上午",
               time: "08:30 - 10:30",
               title: "退房吃早餐 ➔ 前往博多站租車門市取車",
-              transit: "從綱場町退房後，搭乘地鐵至博多站（或搭計程車約 7 分鐘），步行至租車門市辦理手續（記得檢查 ETC 卡與加購保險）",
-              dining: "博多站周邊早餐咖啡館 (KOMEDA 咖啡或站內麵包坊)",
+              transit: "從綱場町搭地鐵或計程車至博多站，步行至租車門市取車辦理手續（加租 ETC 卡）",
+              dining: "博多站周邊早餐咖啡館 (KOMEDA 咖啡或站內可頌麵包)",
               category: "car",
-              notes: "租車門市地址：福岡市博多區博多駅前 3-23-22 シティ22ビル 1F。取車後將行李上車，開啟導航準備自駕前往美麗的糸島半島！",
+              notes: "租車地址：博多區博多駅前 3-23-22 シティ22ビル 1F。取車前可順買三日月屋天然酵母可頌或如水庵筑紫糬！",
               lat: 33.588000,
               lng: 130.418000,
               navLocations: [
-                { name: "博多站租車門市 (シティ22ビル 1F)", query: "Hakata Ward Hakata Ekimae 3-23-22 Fukuoka" },
-                { name: "JR 博多站 (博多口)", query: "Hakata Station" }
+                { name: "博多站租車門市", query: "Hakata Ward Hakata Ekimae 3-23-22 Fukuoka" },
+                { name: "JR 博多站", query: "Hakata Station" }
               ]
             },
             {
@@ -993,10 +963,10 @@
               period: "下午",
               time: "11:30 - 15:30",
               title: "糸島海鮮堂 (已訂位) ➔ 櫻井二見浦夫婦岩·海邊散步漫遊",
-              transit: "博多站出發 ➔ 上「福岡高速環狀線」往西 ➔ 接「西九州自動車道 (福岡前原道路)」➔ 於「前原 IC」下交流道 ➔ 走海岸線公路至糸島二見浦（車程約 45-50 分鐘）",
-              dining: "午餐：糸島海鮮堂 二見浦本店 (已預約，招牌極上生魚片海鮮丼，直面蔚藍海景)",
+              transit: "博多站出發 ➔ 上「福岡高速環狀線」往西 ➔ 接「西九州道」於「前原 IC」下交流道 ➔ 走海岸公路直達糸島（車程約 45 分鐘）",
+              dining: "午餐：糸島海鮮堂 二見浦本店 (已預約，極上生魚片海鮮丼，直面蔚藍海景)",
               category: "food",
-              notes: "吃飽後沿著沙灘散步至白色鳥居與櫻井二見浦「夫婦岩」打卡合影，享受糸島悠閒的海風與度假氛圍。",
+              notes: "餐後漫步至白色鳥居與櫻井二見浦「夫婦岩」合影拍照，享受糸島悠閒海風與海岸線風光。",
               lat: 33.644500,
               lng: 130.198500,
               navLocations: [
@@ -1008,17 +978,16 @@
               id: "s-3-3",
               period: "晚上",
               time: "16:30 - 21:00",
-              title: "因內斯特飯店 - 博多 Check-in ➔ 煎餃烤雞翅 旭軒 本店 ➔ 採買明日糧食",
-              transit: "從糸島循原路西九州道與都市高速開回福岡市博多區（車程約 45 分鐘），將車停妥於飯店合作/周邊收費停車場",
-              dining: "晚餐：煎餃烤雞翅 旭軒 本店 (博多區博多駅前 2-15-22，不能訂位，現場排隊約 20 分鐘；亦可體驗中洲屋台街)",
+              title: "因內斯特飯店 - 博多 Check-in ➔ 煎餃烤雞翅 旭軒 本店 ➔ 超市採買糧食",
+              transit: "循西九州道開回博多區住吉，將車停妥於飯店停車場",
+              dining: "晚餐：煎餃烤雞翅 旭軒 本店 (博多駅前 2-15-22，現場排隊約 20 分鐘；或體驗中洲屋台)",
               category: "food",
-              notes: "入住飯店：因內斯特飯店 - 博多 (INNEST HAKATA，博多區住吉 2-14-19)。享用焦香酥脆的一口餃子與烤雞翅後，記得至超市採買明天長途開車與動物園野餐零食飲料！",
+              notes: "入住飯店：因內斯特飯店 - 博多 (INNEST HAKATA，住吉 2-14-19)。享用酥脆一口煎餃後，到超市採買明天開車前往動物園的零食飲料！",
               lat: 33.587800,
               lng: 130.414000,
               navLocations: [
-                { name: "因內斯特飯店 - 博多 (INNEST HAKATA)", query: "INNEST HAKATA 福岡" },
-                { name: "煎餃烤雞翅 旭軒 本店", query: "旭軒 駅前本店" },
-                { name: "中洲屋台街", query: "Nakasu Yatai Street" }
+                { name: "因內斯特飯店 - 博多", query: "INNEST HAKATA 福岡" },
+                { name: "煎餃烤雞翅 旭軒 本店", query: "旭軒 駅前本店" }
               ]
             }
           ]
@@ -1026,7 +995,7 @@
         {
           day: 4,
           date: "9/30 (三)",
-          title: "INNEST HAKATA 退房 ➔ 自駕出發九州自然野生動物園 ➔ 由布院民宿耍廢 ➔ 18:30 南之風晚餐",
+          title: "INNEST HAKATA 退房 ➔ 九州自然野生動物園 ➔ 由布院民宿放空 ➔ 18:30 南之風晚餐",
           transportSummary: "自駕開車 (福岡高速 ➔ 九州道 ➔ 大分道)",
           transportType: "car",
           hotel: "大分縣由布市湯布院町川北 383-2",
@@ -1035,16 +1004,16 @@
               id: "s-4-1",
               period: "上午",
               time: "08:30 - 13:00",
-              title: "退房吃早餐 ➔ 自駕前往 九州自然野生動物園 (African Safari)",
-              transit: "由 INNEST HAKATA 出發 ➔ 上「福岡高速 2 號線」接「太宰府 IC」➔ 轉「九州自動車道」➔ 於「鳥栖 JCT」轉「大分自動車道」➔ 於「速見 IC」下交流道走國道 500 號直達動物園（車程約 2 小時）",
-              dining: "車上享用昨晚採購之點心麵包，或於大分道「山田 SA」休息站停留用餐",
+              title: "退房出發 ➔ 自駕前往 九州自然野生動物園 (African Safari)",
+              transit: "由 INNEST 出發 ➔ 上太宰府 IC 轉九州道 ➔ 鳥栖 JCT 接大分道 ➔ 於速見 IC / 湯布院 IC 下交流道 ➔ 國道 500 號直達動物園（車程約 2 小時）",
+              dining: "大分道「山田 SA」休息站享用午餐或車上點心",
               category: "car",
-              notes: "九州自然野生動物園支援「自駕開自家車 (My Car) 入園」近距離觀察獅子、大象、長頸鹿；亦可在現場購買叢林巴士票體驗親手餵食猛獸！",
+              notes: "支援「開自家車 (My Car) 直接入園」近距離觀察野生獅子、長頸鹿；亦可在現場購買叢林巴士票體驗親手餵食！",
               lat: 33.344000,
               lng: 131.436500,
               navLocations: [
-                { name: "九州自然野生動物園 (African Safari)", query: "九州自然動物公園アフリカンサファリ" },
-                { name: "大分道 山田 SA 休息站 (下行)", query: "Yamada SA Downbound" }
+                { name: "九州自然野生動物園", query: "九州自然動物公園アフリカンサファリ" },
+                { name: "大分道 山田 SA (休息站)", query: "Yamada SA Downbound" }
               ]
             },
             {
@@ -1052,15 +1021,14 @@
               period: "下午",
               time: "14:00 - 17:00",
               title: "自駕前往溫泉鄉由布院 ➔ 川北民宿 Check-in 耍廢放空",
-              transit: "從動物園出發走國道 500 號接縣道 11 號，沿途欣賞由布岳壯麗火山全景，直達由布院川北民宿（車程約 30 分鐘）",
+              transit: "從動物園走縣道 11 號欣賞由布岳火山景致，約 30 分鐘直達由布院川北民宿",
               dining: "由布院車站前名產小吃 (Milch 半熟起司蛋糕、金賞可樂餅)",
               category: "hotel",
-              notes: "住宿地址：大分縣由布市湯布院町川北 383-2。完成入住登記，在榻榻米和室房泡茶耍廢，享受被由布山嵐包圍的寧靜溫泉美人湯。",
+              notes: "住宿地址：由布市湯布院町川北 383-2。完成入住，在榻榻米和室房泡茶放空，享受由布山嵐美人湯！",
               lat: 33.262500,
               lng: 131.355000,
               navLocations: [
-                { name: "由布院川北民宿", query: "383-2 Yufuincho Kawakita Yufu Oita" },
-                { name: "由布院車站前街道", query: "Yufuin Station" }
+                { name: "由布院川北民宿", query: "383-2 Yufuincho Kawakita Yufu Oita" }
               ]
             },
             {
@@ -1068,14 +1036,14 @@
               period: "晚上",
               time: "18:30 (已預約)",
               title: "18:30 晚餐：Restaurant Minami no Kaze (南之風 義式家庭料理)",
-              transit: "從川北民宿開車前往餐廳約 5 分鐘，門口備有專用免費停車場",
+              transit: "從民宿開車約 5 分鐘抵達，餐廳附專用免費停車場",
               dining: "Restaurant Minami no Kaze (湯布院町川南，已預訂 18:30)",
               category: "food",
-              notes: "隱身於由布院田園間的溫馨義式家庭料理名店。招牌窯烤披薩、義大利麵與由布在地時蔬深受旅客好評。餐後返回民宿享受溫泉夜湯！",
+              notes: "田園間溫馨義式料理名店，招牌窯烤披薩、義大利麵與在地時蔬備受好評。餐後返回民宿泡夜湯！",
               lat: 33.256000,
               lng: 131.358000,
               navLocations: [
-                { name: "Restaurant Minami no Kaze (南之風)", query: "Minami no Kaze 由布院" }
+                { name: "Restaurant Minami no Kaze", query: "Minami no Kaze 由布院" }
               ]
             }
           ]
@@ -1093,30 +1061,31 @@
               period: "上午",
               time: "09:00 - 13:00",
               title: "金鱗湖晨曦之美 ➔ 湯之坪街道散策 ➔ 午餐：由布まぶし 心 釜飯總店",
-              transit: "從川北民宿開車約 6 分鐘至金鱗湖周邊收費停車場，沿湖畔木棧道與湯之坪街道一路漫步逛街",
+              transit: "從川北民宿開車約 6 分鐘至金鱗湖周邊停車場，沿湖畔步道與湯之坪街道一路漫步逛街",
               dining: "午餐：由布まぶし 心 金鱗湖本店 (湯布院町川上 1492-1)",
               category: "food",
-              notes: "金鱗湖晨間經常煙霧繚繞宛如仙境。心釜飯招牌提供豐後牛、由布地雞與鰻魚釜飯「一飯三吃」。必吃甜點：B-Speak 蛋糕捲、SNOOPY 茶屋！",
+              notes: "金鱗湖晨間經常煙霧繚繞宛如仙境。心釜飯招牌豐後牛、由布地雞與鰻魚釜飯三吃。必吃甜點：B-Speak 蛋糕捲 (P-roll 本店，上午先買)、SNOOPY 茶屋！",
               lat: 33.266800,
               lng: 131.365000,
               navLocations: [
                 { name: "金鱗湖 (湖畔步道)", query: "Kinrin Lake Yufuin" },
-                { name: "由布まぶし 心 金鱗湖本店", query: "由布まぶし 心 金鱗湖本店" }
+                { name: "由布まぶし 心 金鱗湖本店", query: "由布まぶし 心 金鱗湖本店" },
+                { name: "B-Speak 蛋糕捲 本店", query: "B-speak 由布院" }
               ]
             },
             {
               id: "s-5-2",
               period: "下午",
               time: "13:30 - 16:30",
-              title: "湯布院童話花卉村 (Yufuin Floral Village) ➔ 紀念品挑選",
-              transit: "從心釜飯金鱗湖本店步行約 3 分鐘即可抵達花卉村入口",
-              dining: "花卉村內特濃生乳霜淇淋 / 貓咪主題咖啡館",
+              title: "湯布院童話花卉村 (Floral Village) ➔ 挑選紀念品",
+              transit: "從心釜飯金鱗湖本店【步行約 3 分鐘】即可抵達花卉村入口",
+              dining: "花卉村特濃生乳霜淇淋 / 貓咪主題咖啡館",
               category: "sightseeing",
-              notes: "仿造英國科茨沃爾德童話鄉村打造的夢幻聚落！滿滿歐風茅草石屋、魔女宅急便麵包坊、水豚與貓頭鷹森林，拍照超可愛。",
+              notes: "仿造英國科茨沃爾德童話鄉村打造的夢幻聚落！歐風茅草石屋、魔女宅急便麵包坊、水豚與貓頭鷹森林超好拍。",
               lat: 33.266200,
               lng: 131.362500,
               navLocations: [
-                { name: "湯布院花卉村 (Floral Village)", query: "Yufuin Floral Village" }
+                { name: "湯布院花卉村", query: "Yufuin Floral Village" }
               ]
             },
             {
@@ -1124,10 +1093,10 @@
               period: "晚上",
               time: "17:30 - 20:30",
               title: "由布院市區吃晚餐 ➔ 返回民宿悠閒泡湯耍廢",
-              transit: "開車返回湯布院川北民宿 (約 5 分鐘)",
-              dining: "由布院車站周邊在地料理 (地雞炭火燒 / 烏龍麵 / 超市熟食便當)",
+              transit: "開車返回川北民宿",
+              dining: "由布院車站周邊在地料理 (地雞炭火燒 / 烏龍麵 / 超市熟食)",
               category: "hotel",
-              notes: "享受由布院的最後一晚，泡暖呼呼的私房溫泉，整理伴手禮戰利品與打包行李。",
+              notes: "享受由布院的最後一晚，泡暖呼呼的私房美人湯，整理伴手禮戰利品與打包行李。",
               lat: 33.262500,
               lng: 131.355000,
               navLocations: [
@@ -1148,11 +1117,11 @@
               id: "s-6-1",
               period: "上午",
               time: "09:30 - 12:30",
-              title: "由布院最後巡禮 ➔ 享用午餐 ➔ 13:00 出發開車前往福岡機場",
-              transit: "13:00 由布院出發 ➔ 上「湯布院 IC」走大分道 ➔ 接「鳥栖 JCT」轉九州道 ➔ 太宰府 IC 接福岡高速 2 號線 ➔ 半道橋 IC 下交流道前往機場租車門市（車程約 1.5 - 2 小時）",
-              dining: "由布院車站旁早午餐，或於返程國道高速公路休息站享用午餐",
+              title: "由布院最後巡禮 ➔ 享用午餐 ➔ 13:00 出發前往福岡機場",
+              transit: "13:00 由布院出發 ➔ 上湯布院 IC 走大分道 ➔ 鳥栖 JCT 轉九州道 ➔ 太宰府 IC 接福岡高速 ➔ 半道橋 IC 前往租車門市（車程約 1.5 - 2 小時）",
+              dining: "由布院車站旁早午餐，或返程國道高速公路休息站",
               category: "car",
-              notes: "檢查隨身重要證件、護照、免稅單據與所有行李，準時於 13:00 發車回程。",
+              notes: "檢查重要證件、護照、免稅單據與所有行李，準時於 13:00 發車返程。",
               lat: 33.262500,
               lng: 131.355000,
               navLocations: [
@@ -1165,10 +1134,10 @@
               period: "下午",
               time: "15:30 還車",
               title: "15:30 機場周邊加油還車 ➔ 搭接駁車至國際線報到 ➔ 19:00 起飛 (IT721)",
-              transit: "還車前請於機場租車門市周圍加油站「加滿油 (レギュラー滿タン)」並保留收據。完成手續後搭乘租車公司免費接駁專車前往國際線航廈",
-              dining: "福岡機場國際線伴手禮免稅街 (一蘭拉麵、明太子、博多通饅頭)",
+              transit: "還車前請於機場租車門市周遭加油站「加滿油 (レギュラー滿タン)」並保留收據。搭乘租車公司免費接駁車前往【國際線航廈】",
+              dining: "福岡機場國際線免稅伴手禮大街",
               category: "shopping",
-              notes: "搭乘台灣虎航 IT721 (19:00 起飛 ➔ 20:25 抵達桃園 T1)。16:30-17:00 抵達國際線 3F 虎航櫃檯完成行李託運後，進入管制區免稅大採購！",
+              notes: "搭乘台灣虎航 IT721 (19:00 起飛 ➔ 20:25 抵達桃園 T1)。16:30-17:00 抵達國際線 3F 虎航櫃檯完成行李託運後，進入管制區免稅大採買！",
               lat: 33.585900,
               lng: 130.450700,
               navLocations: [
@@ -1186,17 +1155,17 @@
     let mapPolyline = null;
 
     const categoryBadges = {
-      sightseeing: { label: '景點觀光', bg: 'bg-[#ecfdf5]', text: 'text-[#065f46]', border: 'border-[#a7f3d0]', icon: 'camera' },
-      food: { label: '美食餐廳', bg: 'bg-[#fff7ed]', text: 'text-[#c2410c]', border: 'border-[#ffedd5]', icon: 'utensils' },
-      shopping: { label: '購物商場', bg: 'bg-[#fdf2f8]', text: 'text-[#be185d]', border: 'border-[#fbcfe8]', icon: 'shopping-bag' },
-      car: { label: '自駕路線', bg: 'bg-[#faf5ff]', text: 'text-[#7e22ce]', border: 'border-[#f3e8ff]', icon: 'car' },
-      transit: { label: '地鐵交通', bg: 'bg-[#fefce8]', text: 'text-[#a16207]', border: 'border-[#fef9c3]', icon: 'subway' },
-      hotel: { label: '住宿飯店', bg: 'bg-[#f0f9ff]', text: 'text-[#0369a1]', border: 'border-[#e0f2fe]', icon: 'building' }
+      sightseeing: { label: '景點觀光', bg: 'bg-[#eef7e4]', text: 'text-[#4d7d1e]', border: 'border-[#cce5b8]', icon: 'camera' },
+      food: { label: '美食餐廳', bg: 'bg-[#fef4ed]', text: 'text-[#bf5a2b]', border: 'border-[#fbd8c3]', icon: 'utensils' },
+      shopping: { label: '購物商場', bg: 'bg-[#fdf3f8]', text: 'text-[#a13b6c]', border: 'border-[#fad3e5]', icon: 'shopping-bag' },
+      car: { label: '自駕路線', bg: 'bg-[#f5f1fa]', text: 'text-[#6e419c]', border: 'border-[#dccef0]', icon: 'car' },
+      hotel: { label: '住宿飯店', bg: 'bg-[#f0f8fd]', text: 'text-[#206b9b]', border: 'border-[#c5e4f8]', icon: 'building' }
     };
 
     function startApplication() {
       initMap();
       renderAll();
+      setupDragScroll();
       try { if (window.lucide) lucide.createIcons(); } catch(e) {}
     }
 
@@ -1231,7 +1200,7 @@
     }
 
     function renderDayTabs() {
-      const container = document.getElementById('day-tabs-container');
+      const container = document.getElementById('day-nav-pills');
       if (!container) return;
       container.innerHTML = '';
 
@@ -1242,16 +1211,16 @@
 
         const icon = d.transportType === 'car' ? '🚗' : '🚇';
 
-        btn.className = `px-3.5 py-1.5 rounded-full text-xs transition-all flex items-center gap-1.5 shrink-0 whitespace-nowrap shadow-2xs ${
+        btn.className = `px-3.5 py-1.5 rounded-full text-xs transition flex items-center gap-1.5 shrink-0 whitespace-nowrap shadow-2xs ${
           isActive 
-            ? 'bg-[#1b2f44] text-white font-normal ring-1 ring-white/20' 
-            : 'bg-stone-100 text-[#4a3416] font-light hover:bg-stone-200'
+            ? 'bg-[#1e293b] text-white font-normal ring-2 ring-white' 
+            : 'bg-stone-100 text-stone-700 font-light hover:bg-stone-200'
         }`;
-        
+
         btn.innerHTML = `
           <span>Day ${d.day}</span>
-          <span class="text-[11px] opacity-75">(${d.date.split(' ')[0]})</span>
-          <span class="text-xs">${icon}</span>
+          <span class="text-[10px] opacity-75">(${d.date.split(' ')[0]})</span>
+          <span>${icon}</span>
         `;
         container.appendChild(btn);
       });
@@ -1274,36 +1243,37 @@
       document.getElementById('active-day-badge').innerText = `DAY ${dayObj.day}`;
       document.getElementById('active-day-date').innerText = dayObj.date;
       document.getElementById('active-day-title').innerText = dayObj.title;
-      document.getElementById('active-day-desc').innerText = `住宿：${dayObj.hotel}`;
-      
-      const badge = document.getElementById('active-day-transport-badge');
+      document.getElementById('active-day-hotel').innerText = `住宿：${dayObj.hotel}`;
+
+      const transportBadge = document.getElementById('active-day-transport-badge');
       if (dayObj.transportType === 'car') {
-        badge.className = "px-2.5 py-0.5 rounded-xl text-xs font-light bg-[#faf5ff] text-[#7e22ce] border border-[#f3e8ff]";
-        badge.innerText = `🚗 ${dayObj.transportSummary}`;
+        transportBadge.className = "px-2.5 py-1 rounded-xl text-xs font-light bg-[#f4edf9] text-[#6d3e9c] flex items-center gap-1 border border-[#dac7ea]";
+        transportBadge.innerHTML = `<i data-lucide="car" class="w-3.5 h-3.5"></i> ${dayObj.transportSummary}`;
       } else {
-        badge.className = "px-2.5 py-0.5 rounded-xl text-xs font-light bg-[#ecfdf5] text-[#065f46] border border-[#a7f3d0]";
-        badge.innerText = `🚇 ${dayObj.transportSummary}`;
+        transportBadge.className = "px-2.5 py-1 rounded-xl text-xs font-light bg-[#eef7e4] text-[#4d7d1e] flex items-center gap-1 border border-[#cbe6b3]";
+        transportBadge.innerHTML = `<i data-lucide="subway" class="w-3.5 h-3.5"></i> ${dayObj.transportSummary}`;
       }
 
       const listContainer = document.getElementById('timeline-spots-list');
       listContainer.innerHTML = '';
 
-      dayObj.spots.forEach(spot => {
+      dayObj.spots.forEach((spot, idx) => {
         const cat = categoryBadges[spot.category] || categoryBadges.sightseeing;
+        const cardClass = idx % 2 === 0 ? 'notch-card-left' : 'notch-card-right';
 
         const card = document.createElement('div');
-        card.className = "bg-white rounded-3xl p-5 shadow-md border border-[#dfc384] space-y-3";
+        card.className = `bg-white ${cardClass} p-5 border border-[#dfc384] shadow-md hover:shadow-lg transition space-y-3 text-xs`;
 
-        let navButtonsHtml = '';
+        let navHtml = '';
         if (spot.navLocations && spot.navLocations.length > 0) {
-          navButtonsHtml = `
-            <div class="pt-2 border-t border-stone-100 flex flex-wrap items-center gap-2">
-              <span class="text-[11px] font-normal text-stone-500 flex items-center gap-1">
-                <i data-lucide="navigation" class="w-3 h-3 text-[#74a838]"></i> 導航：
+          navHtml = `
+            <div class="pt-2.5 border-t border-stone-100 flex flex-wrap items-center gap-1.5">
+              <span class="text-[11px] font-normal text-amber-900 flex items-center gap-1">
+                <i data-lucide="navigation" class="w-3 h-3 text-emerald-600"></i> 一鍵導航：
               </span>
               ${spot.navLocations.map(loc => `
-                <button onclick="googleMapsSearch('${encodeURIComponent(loc.query)}')" class="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-[#f0fdf4] hover:bg-[#dcfce7] text-[#15803d] border border-[#bbf7d0] text-xs font-light transition">
-                  <i data-lucide="map-pin" class="w-3 h-3"></i>
+                <button onclick="googleMapsSearch('${encodeURIComponent(loc.query)}')" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-stone-50 hover:bg-stone-100 text-stone-700 border border-stone-200 text-[11px] font-light transition">
+                  <i data-lucide="map-pin" class="w-2.5 h-2.5 text-amber-600"></i>
                   <span>${loc.name}</span>
                 </button>
               `).join('')}
@@ -1312,55 +1282,54 @@
         }
 
         card.innerHTML = `
-          <div class="flex items-start justify-between gap-3">
+          <div class="flex items-start justify-between gap-2">
             <div class="space-y-1">
               <div class="flex items-center gap-2 flex-wrap">
-                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-normal ${cat.bg} ${cat.text} border ${cat.border}">
-                  <i data-lucide="${cat.icon}" class="w-3 h-3"></i>
-                  ${cat.label}
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] ${cat.bg} ${cat.text} border ${cat.border}">
+                  <i data-lucide="${cat.icon}" class="w-2.5 h-2.5"></i> ${cat.label}
                 </span>
-                <span class="px-2 py-0.5 rounded text-[11px] font-light bg-stone-100 text-stone-600">
+                <span class="px-2 py-0.5 rounded text-[10px] bg-stone-100 text-stone-600 font-light">
                   ${spot.period} · ${spot.time}
                 </span>
               </div>
-              <h4 class="text-base sm:text-lg font-normal text-[#382613] pt-0.5">
+              <h4 class="text-sm sm:text-base font-normal text-[#382613] pt-0.5 leading-snug">
                 ${spot.title}
               </h4>
             </div>
-
-            <button onclick="googleMapsSearch('${encodeURIComponent(spot.title)}')" class="p-2 text-stone-400 hover:text-stone-600 bg-stone-50 rounded-xl transition border border-stone-200 shrink-0">
-              <i data-lucide="external-link" class="w-4 h-4"></i>
+            <button onclick="googleMapsSearch('${encodeURIComponent(spot.title)}')" class="p-1.5 bg-stone-50 hover:bg-stone-100 text-stone-600 rounded-xl border border-stone-200 shrink-0">
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
             </button>
           </div>
 
           ${spot.transit ? `
-            <div class="bg-[#fafaf9] rounded-2xl p-3 border border-stone-200 text-xs text-stone-700 leading-relaxed">
-              <span class="font-normal text-[#382613]">交通路線：</span>
-              <span class="font-light">${spot.transit}</span>
+            <div class="p-2.5 bg-stone-50 rounded-2xl border border-stone-200 text-stone-600 font-light flex items-start gap-2">
+              <i data-lucide="${spot.category === 'car' ? 'car' : 'subway'}" class="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5"></i>
+              <p class="leading-relaxed"><strong class="font-normal text-stone-800">交通方式</strong>：${spot.transit}</p>
             </div>
           ` : ''}
 
           ${spot.dining ? `
-            <div class="bg-[#fffaf5] rounded-2xl p-3 border border-[#fed7aa] text-xs text-[#c2410c] flex items-center justify-between gap-2">
-              <div>
-                <span class="font-normal">美食推薦：</span>
-                <span class="font-light text-[#9a3412]">${spot.dining}</span>
+            <div class="p-2.5 bg-[#fef8f4] rounded-2xl border border-[#f8d7c4] text-[#6e3e23] font-light flex items-start justify-between gap-2">
+              <div class="flex items-start gap-2">
+                <i data-lucide="utensils" class="w-3.5 h-3.5 text-[#e07a5f] shrink-0 mt-0.5"></i>
+                <p class="leading-relaxed"><strong class="font-normal">餐飲推薦</strong>：${spot.dining}</p>
               </div>
               ${spot.bookingUrl ? `
-                <a href="${spot.bookingUrl}" target="_blank" class="px-2.5 py-1 bg-[#ea580c] hover:bg-[#c2410c] text-white rounded-lg text-[11px] font-light whitespace-nowrap">
-                  訂位連結
+                <a href="${spot.bookingUrl}" target="_blank" class="shrink-0 px-2.5 py-1 bg-[#e07a5f] hover:bg-[#cf6b50] text-white rounded-xl text-[10px]">
+                  訂位
                 </a>
               ` : ''}
             </div>
           ` : ''}
 
           ${spot.notes ? `
-            <div class="text-xs text-stone-600 font-light bg-[#fafaf9] rounded-2xl p-3 border border-stone-200 leading-relaxed">
-              💡 ${spot.notes}
+            <div class="p-2.5 bg-amber-50/60 rounded-2xl border border-amber-200/80 text-amber-900 font-light flex items-start gap-2">
+              <i data-lucide="info" class="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5"></i>
+              <p class="leading-relaxed">${spot.notes}</p>
             </div>
           ` : ''}
 
-          ${navButtonsHtml}
+          ${navHtml}
         `;
 
         listContainer.appendChild(card);
@@ -1378,27 +1347,21 @@
       }
 
       const dayObj = tripData.days.find(d => d.day === tripData.currentDay);
-      if (!dayObj || !dayObj.spots || dayObj.spots.length === 0) return;
+      if (!dayObj || !dayObj.spots) return;
 
       const latLngs = [];
 
       dayObj.spots.forEach((spot, idx) => {
-        let lat = spot.lat;
-        let lng = spot.lng;
-
-        if (!lat || !lng) {
-          lat = 33.5900 + (idx * 0.02);
-          lng = 130.4017 + (idx * 0.02);
-        }
-
+        let lat = spot.lat || 33.5900 + (idx * 0.02);
+        let lng = spot.lng || 130.4017 + (idx * 0.02);
         latLngs.push([lat, lng]);
 
-        const markerColor = dayObj.transportType === 'car' ? '#7e22ce' : '#15803d';
+        const markerColor = dayObj.transportType === 'car' ? '#6e419c' : '#74a838';
 
         const customIcon = L.divIcon({
           className: 'custom-map-icon',
           html: `
-            <div style="background-color: ${markerColor}; color: white; border-radius: 9999px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 11px; border: 2px solid white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);">
+            <div style="background-color: ${markerColor}; color: white; border-radius: 9999px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-weight: 400; font-size: 11px; border: 2px solid white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);">
               ${idx + 1}
             </div>
           `,
@@ -1408,9 +1371,9 @@
 
         const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
         marker.bindPopup(`
-          <div style="font-family: 'Noto Sans TC', sans-serif; font-size: 12px; line-height: 1.4;">
-            <strong style="color: #382613; font-weight: 500;">${spot.title}</strong>
-            <div style="color: #666; font-size: 11px; margin-top: 3px;">${spot.period} · ${spot.time}</div>
+          <div style="font-family: 'Noto Sans TC', sans-serif; font-size: 11px; line-height: 1.4;">
+            <strong style="color: #382613; font-size: 12px;">${spot.title}</strong>
+            <div style="color: #666; margin-top: 2px;">${spot.period} · ${spot.time}</div>
           </div>
         `);
         mapMarkers.push(marker);
@@ -1418,21 +1381,18 @@
 
       if (latLngs.length > 1) {
         mapPolyline = L.polyline(latLngs, {
-          color: dayObj.transportType === 'car' ? '#7e22ce' : '#15803d',
+          color: dayObj.transportType === 'car' ? '#6e419c' : '#74a838',
           weight: 4,
           opacity: 0.85,
-          dashArray: '6, 8',
-          lineCap: 'round'
+          dashArray: '6, 8'
         }).addTo(map);
 
-        map.fitBounds(mapPolyline.getBounds(), { padding: [40, 40] });
+        map.fitBounds(mapPolyline.getBounds(), { padding: [35, 35] });
       } else if (latLngs.length === 1) {
         map.setView(latLngs[0], 13);
       }
 
-      setTimeout(() => {
-        if (map) map.invalidateSize();
-      }, 200);
+      setTimeout(() => { if (map) map.invalidateSize(); }, 200);
     }
 
     function resetMapView() {
@@ -1443,20 +1403,86 @@
       window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
     }
 
-    function toggleAccordion(bodyId, arrowId) {
+    function toggleSectionAccordion(bodyId, arrowId, textId) {
       const body = document.getElementById(bodyId);
       const arrow = document.getElementById(arrowId);
+      const text = textId ? document.getElementById(textId) : null;
       if (!body) return;
 
-      if (body.classList.contains('hidden')) {
+      const isHidden = body.classList.contains('hidden');
+      if (isHidden) {
         body.classList.remove('hidden');
-        if (arrow) arrow.classList.add('rotate-180');
+        if (arrow) arrow.style.transform = 'rotate(180deg)';
+        if (text) text.innerText = '收起';
       } else {
         body.classList.add('hidden');
-        if (arrow) arrow.classList.remove('rotate-180');
+        if (arrow) arrow.style.transform = 'rotate(0deg)';
+        if (text) text.innerText = '展開';
       }
     }
-  </script>
 
+    function filterShoppingDay(dayKey) {
+      const cards = document.querySelectorAll('.shop-day-card');
+      const buttons = document.querySelectorAll('.shop-filter-btn');
+
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-shop-day') === dayKey) {
+          btn.className = 'shop-filter-btn px-4 py-2 rounded-full text-xs font-normal transition bg-[#1e293b] text-white shadow-2xs whitespace-nowrap shrink-0';
+        } else {
+          btn.className = 'shop-filter-btn px-4 py-2 rounded-full text-xs font-light transition bg-white text-[#382613] hover:bg-stone-100 shadow-2xs whitespace-nowrap shrink-0 border border-[#ebd8ab]';
+        }
+      });
+
+      cards.forEach(card => {
+        const days = card.getAttribute('data-shop-day') || '';
+        if (dayKey === 'all' || days.includes(dayKey)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Drag-to-Scroll Mechanism for both Day Pills and Shopping Pills
+    function setupDragScroll() {
+      const containers = [
+        document.getElementById('day-nav-pills'),
+        document.getElementById('shopping-pills-drag')
+      ];
+
+      containers.forEach(el => {
+        if (!el) return;
+
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        el.addEventListener('mousedown', (e) => {
+          isDown = true;
+          el.classList.add('is-dragging');
+          startX = e.pageX - el.offsetLeft;
+          scrollLeft = el.scrollLeft;
+        });
+
+        el.addEventListener('mouseleave', () => {
+          isDown = false;
+          el.classList.remove('is-dragging');
+        });
+
+        el.addEventListener('mouseup', () => {
+          isDown = false;
+          el.classList.remove('is-dragging');
+        });
+
+        el.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - el.offsetLeft;
+          const walk = (x - startX) * 1.6; // Scroll speed multiplier
+          el.scrollLeft = scrollLeft - walk;
+        });
+      });
+    }
+  </script>
 </body>
 </html>
